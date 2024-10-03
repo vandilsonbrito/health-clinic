@@ -2,8 +2,8 @@ import { MoveRight } from 'lucide-react';
 
 export default function Banner() {
   return (
-    <section className="w-full max-w-7xl h-[35rem] pt-14 pb-12 overflow-hidden bg-white" id="/home">
-        <div className="w-full h-full flex bg-bluePrimary rounded-[3rem]">
+    <section className="w-full max-w-7xl h-[35rem] pt-14 pb-12 overflow-hidden bg-white" >
+        <div className="w-full h-full flex bg-bluePrimary rounded-[3rem]" >
 
             <div className="w-1/2 h-full flex flex-col justify-center gap-5 pl-32 pr-14 ">
                 <h1 className="text-[3rem] text-white font-bold leading-snug">Sua Saúde é nossa prioridade.</h1>
