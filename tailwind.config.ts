@@ -61,7 +61,8 @@ const config: Config = {
   		},
 		backgroundImage: {
 			'heroImg': 'url(../public/hero.png)',
-			'convinceImg': 'url(../public/why-us.png)'
+			'convinceImg': 'url(../public/why-us.png)',
+			'whoWeAreImg': 'url(../public/who-we-are.jpg)'
 		}
   	}
   },
