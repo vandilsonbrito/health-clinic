@@ -1,12 +1,11 @@
 import Image, { StaticImageData } from 'next/image';
 import React from 'react';
 import { FaStar } from "react-icons/fa";
-import { RiDoubleQuotesL, RiDoubleQuotesR  } from "react-icons/ri";
 
 
 export default function TestemonialCard({ url, name, feedback }: { url: StaticImageData, name: string, feedback: string }) {
   return (
-    <div className='w-[35rem] h-60 px-10 flex flex-col justify-center gap-3 '>
+    <div className='w-full h-full lg:w-[35rem] lg:h-60 px-10 flex flex-col justify-center gap-3 '>
         <div className="flex items-center gap-3">
             <Image 
                 src={url}

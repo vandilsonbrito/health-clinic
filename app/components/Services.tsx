@@ -11,9 +11,9 @@ export default function Services() {
   return (
     <section className="w-full max-w-7xl h-full flex flex-col justify-center items-center bg-white" id="especialidades">
         <div className="w-full flex justify-center mt-10" data-aos="fade-up">
-            <h2 className="text-bluePrimary text-3xl font-semibold text-center">Especialidades</h2>
+            <h2 className="text-3xl font-semibold text-center">Especialidades</h2>
         </div>
-        <div className="w-full flex flex-wrap gap-3 mt-16 justify-center">
+        <div className="w-full flex flex-wrap gap-3 mt-14 justify-center">
             <ServiceContainer icon={<MdOutlinePregnantWoman/>} title={'Obstetrícia'} />
             <ServiceContainer icon={<LiaTeethSolid/>} title={'Odontologia'} />
             <ServiceContainer icon={<GiHeartBeats/>} title={'Cardiologia'} />

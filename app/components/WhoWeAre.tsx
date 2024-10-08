@@ -2,10 +2,10 @@ import React from 'react';
 
 export default function WhoWeAre() {
   return (
-    <section className="w-full max-w-6xl h-full flex flex-col-reverse lg:flex-row items-start px-8 lg:px-0 py-10 lg:py-12 text-black " id="who-we-are">
+    <section className="w-full max-w-6xl h-full flex flex-col-reverse xl:flex-row items-start  px-8 xl:px-0 py-10 lg:py-12 text-black " id="who-we-are">
         <div className="w-full h-full mt-7 lg:mt-0">
-            <div className="w-full h-full flex justify-center md:items-center lg:items-start ">
-                <div className="w-full md:w-[24rem] lg:w-full h-[13rem] md:h-[16rem] lg:h-[21rem] bg-whoWeAreImg bg-no-repeat bg-contain"></div>
+            <div className="w-full h-full flex justify-center md:items-center xl:items-start ">
+                <div className="w-full md:w-[24rem] xl:w-full h-[13rem] md:h-[16rem] xl:h-[21rem] bg-whoWeAreImg bg-no-repeat bg-contain lg:mt-4 xl:mt-0"></div>
             </div>
         </div>
         <div className="w-full h-full flex flex-col gap-4">

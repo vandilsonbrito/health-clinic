@@ -2,16 +2,17 @@ import React from 'react';
 import Logo from '../../public/logo-clinia-saude-white.png';
 import { RxInstagramLogo } from "react-icons/rx";
 import { FaWhatsapp } from "react-icons/fa";
+import Image from 'next/image';
 
 
 export default function Footer() {
   return (
-    <footer className='w-full h-full flex flex-col justify-center items-center gap-8 pt-10  bg-bluePrimary text-white'>
-        <div className="w-full max-w-7xl h-full flex justify-center items-center px-5 md:px-14">
+    <footer className='w-full h-full flex flex-col justify-center items-center gap-8 pt-10 bg-bluePrimary text-white '>
+        <div className="w-full max-w-7xl h-full flex justify-center items-center px-7 md:px-14">
 
-            <div className="w-fit flex gap-24 items-center justify-center">
+            <div className="w-fit flex flex-col lg:flex-row gap-16 xl:gap-24 items-center justify-center">
                 <div className="w-fit h-fit flex flex-col items-start justify-center gap-5">
-                    <img src={Logo.src} alt="Logo" className='w-44'/>
+                    <Image src={Logo.src} alt="Logo" className='w-44' width={176} height={176}/>
                     <address className='w-[13rem] text-sm'>
                         <p>Rua Quatrocentos e Quinze, n° 578, Centro, Avante</p>
                     </address>
@@ -42,7 +43,7 @@ export default function Footer() {
             </div>
 
         </div>
-        <div className="w-full h-full py-3 text-sm text-center bg-white text-bluePrimary font-medium">
+        <div className="w-full h-full p-3 text-sm text-center bg-white text-bluePrimary font-medium">
             <p>Copyright &copy; 2024. Clínica + Saúde, todos os direitos reservados. Desenvolvido por <a href="https://vandilson-portfolio.vercel.app" className='underline' target="_blank" rel="noopener noreferrer">Vandilson Brito</a>.</p>
         </div>
     </footer>
