@@ -16,7 +16,7 @@ export default function Banner() {
             <div className="w-full lg:w-1/2 h-full relative md:top-10 lg:top-0">
                 <div className="w-full h-full flex justify-center items-center absolute right:6 lg:right-8">
                   <div className="w-[200px] h-[200px] lg:w-[400px] lg:h-[400px] bg-blueSecundary rounded-[3rem]"></div>
-                  <div className="w-full h-[15rem] lg:h-[32.5rem] bg-heroImg bg-no-repeat bg-contain absolute -top-5 left-[6.7rem] md:-top-10  md:left-[16rem] lg:-top-10 lg:left-[7.5rem] z-10 "></div>
+                  <div className="w-full h-[15rem] lg:h-[32.5rem] bg-heroImg bg-no-repeat bg-contain absolute -top-5 left-[6.3rem] md:-top-10  md:left-[16rem] lg:-top-10 lg:left-[7.5rem] z-10 "></div>
                 </div>
             </div>
         </div>
