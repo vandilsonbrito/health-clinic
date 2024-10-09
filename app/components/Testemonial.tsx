@@ -1,11 +1,24 @@
+'use client';
+import { useEffect } from "react";
+import Aos from 'aos';
 import React from 'react'
 import CarouselContainer from './CarouselContainer';
 import { MoveRight } from 'lucide-react';
 
 
 export default function Testemonials() {
+
+  useEffect(() => {
+    Aos.init({
+      duration: 1000,
+      easing: "ease-in-out",
+      once: true,
+      offset: 70
+    })
+  }, []);
+
   return (
-    <section className='w-full h-full flex flex-col items-center justify-center gap-16 px-7 md:px-14 bg-white text-black py-10'>
+    <section className='w-full h-full flex flex-col items-center justify-center gap-16 px-7 md:px-14 bg-white text-black py-10' data-aos="fade-up">
         <div className="w-full h-full flex flex-col lg:flex-row items-center justify-center gap-16">
           <div className="w-full lg:w-[30rem] h-full flex flex-col gap-2">
             <h2 className="text-3xl font-semibold text-left">Depoimentos</h2>
