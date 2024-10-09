@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
+import "aos/dist/aos.css";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -15,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" style={{scrollBehavior:'smooth'}}>
+    <html lang="pt-br" style={{scrollBehavior:'smooth'}}>
       <body
         className={`${montserrat.className} antialiased`}
       >
