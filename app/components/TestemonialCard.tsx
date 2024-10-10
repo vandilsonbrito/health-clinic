@@ -10,6 +10,8 @@ export default function TestemonialCard({ url, name, feedback }: { url: StaticIm
             <Image 
                 src={url}
                 alt='Foto do cliente' 
+                width={200}
+                height={200}
                 className="w-[4.2rem] h-[4.2rem] rounded-full border-2 bg-no-repeat aspect-square "/>
             <div className="flex flex-col items-start gap-2">
                 <p>{name}</p>
