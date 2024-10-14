@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import "aos/dist/aos.css";
+import { AuthProvider } from "../firebase/authContext";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -19,8 +20,10 @@ export default function RootLayout({
     <html lang="pt-br" style={{scrollBehavior:'smooth'}}>
       <body
         className={`${montserrat.className} antialiased`}
-      >
+      > 
+      <AuthProvider>
         {children}
+      </AuthProvider>
       </body>
     </html>
   );
