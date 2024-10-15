@@ -15,7 +15,7 @@ const firebaseConfig = {
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
-// Inicializa o Firebase Realtime Database e obtém uma referência ao serviço
+// Inicializa o Firebase Firestore Database e obtém uma referência ao serviço
 const database = getFirestore(app);
 
 export { database };
