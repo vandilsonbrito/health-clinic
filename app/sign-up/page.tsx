@@ -67,7 +67,7 @@ export default function UserSignUp() {
         if(result && result.user) {
             setLoadUser(false);
             //setUserSignedUp(true);
-            return router.push('/');
+            return router.push('/agendamento');
         }
 
     }
@@ -78,7 +78,7 @@ export default function UserSignUp() {
         const { result, error } = await SignInWithGoogle();
         if (result) {
             setLoadUser(false);
-            return router.push('/favorite-genres');
+            return router.push('/agendamento');
         } else {
             console.error('Error signing in with Google:', error);
             setLoadUser(false);
