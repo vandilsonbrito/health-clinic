@@ -17,12 +17,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-br" style={{scrollBehavior:'smooth'}}>
+    <html lang="pt-br">
       <body
         className={`${montserrat.className} antialiased`}
       > 
-      <AuthProvider>
-        {children}
+      <AuthProvider>  
+        {children}  
       </AuthProvider>
       </body>
     </html>
