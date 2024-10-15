@@ -1,7 +1,6 @@
 import React from 'react'
 import { FaCalendarAlt, FaCheckCircle  } from 'react-icons/fa';
 import { FaUserDoctor, FaRegClock  } from "react-icons/fa6";
-import ChooseSpeciality from './Appointment/ChooseSpeciality';
 import CarouselSpecialities from './Appointment/CarouselSpecialities';
 
 export default function ScheduleAppointment() {
@@ -46,7 +45,7 @@ export default function ScheduleAppointment() {
             </div>
 
             <div className="p-3 pb-8 flex flex-col gap-4">
-                <ChooseSpeciality/>
+                <h2 className='font-medium'>Especialidades Disponíveis</h2>
                 <CarouselSpecialities/>
             </div>
         </div>
