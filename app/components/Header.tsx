@@ -26,7 +26,7 @@ export default function Header() {
             {
               userAuth ?
               (
-                <Button className="bg-bluePrimary hover:bg-blueSecundary w-28 font-medium" onClick={() => logout()}>
+                <Button className="bg-bluePrimary hover:bg-blueSecundary w-28 font-medium active:scale-x-[.98]" onClick={() => logout()}>
                     Logout
                 </Button>
               )
