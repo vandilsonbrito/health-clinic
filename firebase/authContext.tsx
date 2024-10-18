@@ -2,13 +2,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from './firebaseAuthConfig';
+import { AuthContextType } from '@/utils/types';
 
-interface AuthContextType {
-    userAuth: User | null;
-    login: (email: string, password: string) => Promise<void>;
-    logout: () => Promise<void>;
-    authLoading: boolean; 
-}
 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
@@ -56,7 +51,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             {  authLoading 
                 ? 
                         <div className="w-full h-full min-h-screen flex flex-col justify-center items-center">
-                            <p className='text-lg mb-4'>Loading</p>
+                            <p className='text-lg mb-4'>Carregando</p>
                             <span className="loader"></span>
                         </div> 
                 : 
@@ -64,7 +59,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
         </AuthContext.Provider>
     )
-};
+};  
 
 // Hook personalizado para usar o AuthContext
 export const useAuth = () => {
