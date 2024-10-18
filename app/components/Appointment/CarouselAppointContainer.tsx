@@ -4,12 +4,17 @@ import React from 'react'
 
 export default function CarouselAppointContainer({ url, especiality, professionalName }: { url: StaticImageData, especiality: string, professionalName: string }) {
 
-    const { addEspeciality, removeEspeciality, selectedEspeciality } = useGlobalStore();
+    const { addEspeciality, removeEspeciality, selectedEspeciality, selectedDate, removeDate } = useGlobalStore();
 
     const handleChooseProfessional = () => {
       if(selectedEspeciality.length > 0){
         selectedEspeciality.forEach((item) => {
           removeEspeciality([item])
+        })
+      }
+      if(selectedDate.length > 0){
+        selectedDate.forEach((item) => {
+            removeDate([item])
         })
       }
       addEspeciality([professionalName, especiality])
@@ -18,7 +23,7 @@ export default function CarouselAppointContainer({ url, especiality, professiona
     return (
         <button 
           onClick={() => handleChooseProfessional()}
-          className="w-40 p-2 py-5 rounded-3xl flex flex-col justify-center items-center gap-1 bg-[#f9fbff] hover:bg-blue-100 transform ease-in-out duration-200 text-black text-4xl border"
+          className={`w-40 p-2 py-5 rounded-3xl flex flex-col justify-center items-center gap-1 bg-[#f9fbff] hover:bg-blue-100 transform ease-in-out duration-200 text-black text-4xl border ${selectedEspeciality[0] === professionalName ? 'selected-container hover:bg-bluePrimary' : ''}`}
           >
             <div className="flex flex-col items-center justify-center rounded-full bg-white ">
                 <Image 
