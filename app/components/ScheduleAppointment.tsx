@@ -34,6 +34,14 @@ export default function ScheduleAppointment() {
         setSelectedStep(sectionNumber);
         setSecion(sections[sectionNumber || 1]);
     }
+
+    useEffect(() => {
+        if(returnToFirstStep) {
+            setSecion(<SpecialitiesAvailable />);
+            setSelectedStep(1);
+        } 
+        setReturnToFirstStep(false)
+    }, [returnToFirstStep]);
     
     return (
         <>

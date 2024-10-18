@@ -6,7 +6,7 @@ import { FaCheck } from "react-icons/fa";
 
 export default function FinishAppointment() {
 
-    const { selectedEspeciality, selectedDate } = useGlobalStore();
+    const { selectedEspeciality, selectedDate, setReturnToFirstStep } = useGlobalStore();
 
     return (
         <div className='w-full h-full flex flex-col gap-4'>
@@ -32,7 +32,7 @@ export default function FinishAppointment() {
                 <div className="flex gap-5">
                     <Button 
                         className='bg-white text-bluePrimary border-2 border-blueSecundary hover:bg-white hover:shadow-xl font-semibold  active:scale-x-[.98]'
-                        //onClick={() => setReturnToSpecialitiesAvailable(true)}
+                        onClick={() => setReturnToFirstStep(true)}
                         >
                         Voltar
                     </Button>
