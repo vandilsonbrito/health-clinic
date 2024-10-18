@@ -4,7 +4,8 @@ import { selectedConsultationType } from './types';
 export type State = {
     selectedConsultation: selectedConsultationType[]
     selectedEspeciality: string[]
-    selectedDate: string[]
+    selectedDate: string[],
+    returnToFirstStep: boolean
 };
 
 export type Action = {
@@ -14,6 +15,7 @@ export type Action = {
     removeEspeciality: (selectedEspeciality: State['selectedEspeciality']) => void,
     addDate: (selectedDate: State['selectedDate']) => void,
     removeDate: (selectedDate: State['selectedDate']) => void,
+    setReturnToFirstStep: (returnToFirstStep: State['returnToFirstStep']) => void
 };
 
 const useGlobalStore = create <State & Action>((set) => ({
@@ -45,7 +47,10 @@ const useGlobalStore = create <State & Action>((set) => ({
     removeDate: (selectedDate) =>
         set((state) => ({                             
             selectedDate: state.selectedDate.filter(especiality => !selectedDate.includes(especiality))
-    }))
+    })),
+
+    returnToFirstStep: false,
+    setReturnToFirstStep: (value: boolean) => set({ returnToFirstStep: value })
 
 }));
 
