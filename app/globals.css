@@ -117,5 +117,10 @@ tbody tr:nth-child(even) {
 table button {
   @apply w-full h-full hover:bg-bluePrimary hover:text-white transform ease-linear duration-200
 }
+/* end */
 
+/* Schedule Appointment -> selected step */
+.selected-container {
+  @apply bg-blueSecundary text-white;
+}
 /* end */
