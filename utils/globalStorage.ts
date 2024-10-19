@@ -6,6 +6,7 @@ export type State = {
     selectedEspeciality: string[]
     selectedDate: string[],
     returnToFirstStep: boolean
+    jumpToNextStep: boolean
 };
 
 export type Action = {
@@ -15,7 +16,8 @@ export type Action = {
     removeEspeciality: (selectedEspeciality: State['selectedEspeciality']) => void,
     addDate: (selectedDate: State['selectedDate']) => void,
     removeDate: (selectedDate: State['selectedDate']) => void,
-    setReturnToFirstStep: (returnToFirstStep: State['returnToFirstStep']) => void
+    setReturnToFirstStep: (returnToFirstStep: State['returnToFirstStep']) => void,
+    setJumpToNextStep: (jumpToNextStep: State['jumpToNextStep']) => void,
 };
 
 const useGlobalStore = create <State & Action>((set) => ({
@@ -50,7 +52,9 @@ const useGlobalStore = create <State & Action>((set) => ({
     })),
 
     returnToFirstStep: false,
-    setReturnToFirstStep: (value: boolean) => set({ returnToFirstStep: value })
+    setReturnToFirstStep: (value: boolean) => set({ returnToFirstStep: value }),
+    jumpToNextStep: false,
+    setJumpToNextStep: (value: boolean) => set({ jumpToNextStep: value})
 
 }));
 
