@@ -66,12 +66,13 @@ export default function ScheduleAppointment() {
                 reverseOrder={false}
             />
             <div className="w-full h-full ">
-                <div className='w-full p-5 flex items-center justify-center gap-4 font-medium text-2xl bg-blue-100 text-blueSecundary'>
-                    <FaCalendarAlt className='text-4xl' />
+
+                <div className='w-full p-2 xl:p-5 mt-1 xl:mt-0 flex items-center justify-center gap-4 font-medium text-2xl bg-blue-100 text-blueSecundary'>
+                    <FaCalendarAlt className='text-2xl xl:text-4xl' />
                     <h1>Marcar Consulta</h1>
                 </div>
-                <div className="w-full h-full border mt-5">
-                    <div className="w-full h-full p-3">
+                <div className="w-full h-full border mt-5 ">
+                    <div className="w-full h-full p-3 hidden xl:block">
                         <ul className="flex items-center gap-6 border-b pb-5">
                             <li>
                                 <button
@@ -109,7 +110,19 @@ export default function ScheduleAppointment() {
                         </ul>
                     </div>
                     <div className="p-3 pb-8 ">
-                        {section || <SpecialitiesAvailable />}
+                        {section}
+                    </div>
+
+
+                    <div className={`xl:hidden w-full h-full flex justify-between items-center p-2 mt-4 sm:px-5  ${selectedStep === 3 && 'hidden'}`}>
+                        <Button 
+                            onClick={() => handleScheduleSection(selectedStep - 1)}
+                            className="bg-transparent text-blueSecundary hover:bg-bluePrimary hover:text-white font-semibold border"
+                            >Voltar</Button>
+                        <Button 
+                            onClick={() => handleScheduleSection(selectedStep + 1)}
+                            className="bg-blueSecundary hover:bg-bluePrimary"
+                            >Avançar</Button>
                     </div>
                 </div>
 
