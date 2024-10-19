@@ -7,7 +7,7 @@ import useGlobalStore from '../../../utils/globalStorage';
 export default function AvailableDate() {
 
     const [agendaData, setAgendaData] = useState<ProfessionalData | null>(null);
-    const { addDate, removeDate, selectedEspeciality, selectedDate } = useGlobalStore();
+    const { addDate, removeDate, selectedEspeciality, selectedDate, setJumpToNextStep } = useGlobalStore();
 
     useEffect(() => {
         const formattedName: string = selectedEspeciality[0].toLowerCase().replaceAll(' ', '-');
@@ -21,13 +21,15 @@ export default function AvailableDate() {
             }
         }
         fetchData();
+
+        setJumpToNextStep(false);
     }, []);
 
-    useEffect(() => {
+    /* useEffect(() => {
         console.log("Agenda",  agendaData?.agenda.date);
         console.log("selectedEspeciality", selectedEspeciality);
         console.log("selectedDate", selectedDate);
-    }, [agendaData, selectedEspeciality]);
+    }, [agendaData, selectedEspeciality]); */
 
     const handleDateClick = (date: string, time: string) => {
         if(selectedDate.length > 0){
@@ -35,11 +37,13 @@ export default function AvailableDate() {
                 removeDate([item])
             })
         }
-        addDate([date, time])
+        addDate([date, time]);
+        setJumpToNextStep(true);
     }
 
     const displayAgenda = () => {
-        let arrAux: React.JSX.Element[] = [], arrAux2: React.JSX.Element[] = [];
+        let arrAux: React.JSX.Element[] = [];
+        const arrAux2: React.JSX.Element[] = [];
         if (agendaData) {
             agendaData.agenda.date.map((date, index) => {
                 arrAux.push(
@@ -72,11 +76,23 @@ export default function AvailableDate() {
 
 
     return (
-        <div className='w-full h-full flex flex-col gap-4'>
+        <div className='w-full h-full flex flex-col gap-4  availableDate'>
             <h2 className='font-medium'>Datas Disponíveis</h2>
-            <div className="flex gap-1">
-                {displayAgenda()}
-            </div>
+            {
+                agendaData ?
+                (
+                    <div className="flex flex-col items-center lg:flex-row gap-1">
+                        {displayAgenda()}
+                    </div>
+                )
+                :
+                (   
+                    <div className="w-full h-full min-h-[10rem] flex flex-col justify-center items-center">
+                        <p className='text-lg mb-4'>Loading</p>
+                        <span className="loader"></span>
+                    </div>
+                )
+            }
         </div>
     )
 }
