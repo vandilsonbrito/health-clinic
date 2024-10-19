@@ -11,6 +11,12 @@ export const metadata: Metadata = {
   description: "Clinica + Saúde",
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  minimumScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -21,9 +27,9 @@ export default function RootLayout({
       <body
         className={`${montserrat.className} antialiased`}
       > 
-      <AuthProvider>  
-        {children}  
-      </AuthProvider>
+        <AuthProvider>  
+            {children}  
+        </AuthProvider>
       </body>
     </html>
   );
