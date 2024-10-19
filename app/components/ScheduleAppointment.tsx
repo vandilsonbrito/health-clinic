@@ -8,11 +8,12 @@ import FinishAppointment from './Appointment/FinishAppointment';
 import { SectionsObjType } from '../../utils/types';
 import useGlobalStore from '@/utils/globalStorage';
 import toast, { Toaster } from 'react-hot-toast';
+import { Button } from '@/components/ui/button';
 
 
 export default function ScheduleAppointment() {
     
-    const { selectedEspeciality, selectedDate, returnToFirstStep, setReturnToFirstStep } = useGlobalStore();
+    const { selectedEspeciality, selectedDate, returnToFirstStep, setReturnToFirstStep, jumpToNextStep } = useGlobalStore();
 
     const [section, setSecion] = useState<React.ReactElement | null>(null);
     const [selectedStep, setSelectedStep] = useState<number>(1);
@@ -28,7 +29,7 @@ export default function ScheduleAppointment() {
                 borderRadius: '10px',
                 background: '#333',
                 color: '#fff',
-              }, });
+            }, });
             return;
         }
         setSelectedStep(sectionNumber);
@@ -36,11 +37,26 @@ export default function ScheduleAppointment() {
     }
 
     useEffect(() => {
+        setSecion(<SpecialitiesAvailable />);
+    }, []);
+
+    useEffect(()=> {
+        if(jumpToNextStep) {
+            const delay = setTimeout(() => {
+                handleScheduleSection(selectedStep + 1);
+            }, 500);
+            
+
+            return () => clearTimeout(delay);
+        }
+    }, [jumpToNextStep])
+
+    useEffect(() => {
         if(returnToFirstStep) {
             setSecion(<SpecialitiesAvailable />);
             setSelectedStep(1);
         } 
-        setReturnToFirstStep(false)
+        setReturnToFirstStep(false);
     }, [returnToFirstStep]);
     
     return (
@@ -96,6 +112,7 @@ export default function ScheduleAppointment() {
                         {section || <SpecialitiesAvailable />}
                     </div>
                 </div>
+
             </div>
         </>
     )
