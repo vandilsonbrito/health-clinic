@@ -16,6 +16,9 @@ export default function AvailableSpecialities() {
     //const [servicesData, setServicesData] = useState<ProfessionalData[] | null>(null);
     const [especiality, setEspeciality] = useState<string[]>([]);
     const [professionalsName, setProfessionalsName] = useState<string[]>([]);
+    const isSuperMobile = useMedia({maxWidth: '400px'});
+    const isMobile = useMedia({maxWidth: '530px'});
+    const isMediumMobile = useMedia({maxWidth: '1020px'});
 
     useEffect(() => {
         async function fetchData() {
@@ -49,8 +52,8 @@ export default function AvailableSpecialities() {
     const settings = {
         dots: true,
         infinite: true,
-        slidesToShow: 6,
-        slidesToScroll: 6,
+        slidesToShow: isSuperMobile ? 2 : isMobile ? 3 : isMediumMobile ? 4 : 6,
+        slidesToScroll: isSuperMobile ? 2 : isMobile ? 3 : isMediumMobile ? 4 : 6,
         autoplay: false,
         speed: 300,
         autoplaySpeed: 5000,
