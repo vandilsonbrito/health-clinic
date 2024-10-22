@@ -6,7 +6,8 @@ export type State = {
     selectedEspeciality: string[]
     selectedDate: string[],
     returnToFirstStep: boolean
-    jumpToNextStep: boolean
+    jumpToNextStep: boolean, 
+    isCancelAppointmentModalOpen: boolean
 };
 
 export type Action = {
@@ -18,6 +19,7 @@ export type Action = {
     removeDate: (selectedDate: State['selectedDate']) => void,
     setReturnToFirstStep: (returnToFirstStep: State['returnToFirstStep']) => void,
     setJumpToNextStep: (jumpToNextStep: State['jumpToNextStep']) => void,
+    setIsCancelAppointmentModalOpen: (isCancelAppointmentModalOpen: State['isCancelAppointmentModalOpen']) => void
 };
 
 const useGlobalStore = create <State & Action>((set) => ({
@@ -54,7 +56,9 @@ const useGlobalStore = create <State & Action>((set) => ({
     returnToFirstStep: false,
     setReturnToFirstStep: (value: boolean) => set({ returnToFirstStep: value }),
     jumpToNextStep: false,
-    setJumpToNextStep: (value: boolean) => set({ jumpToNextStep: value})
+    setJumpToNextStep: (value: boolean) => set({ jumpToNextStep: value}),
+    isCancelAppointmentModalOpen: false,
+    setIsCancelAppointmentModalOpen: (value: boolean) => set({ isCancelAppointmentModalOpen: value}),
 
 }));
 
