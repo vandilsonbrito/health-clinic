@@ -4,6 +4,7 @@ import Aos from 'aos';
 import React from 'react'
 import CarouselContainer from './CarouselContainer';
 import { MoveRight } from 'lucide-react';
+import Link from "next/link";
 
 
 export default function Testemonials() {
@@ -28,10 +29,10 @@ export default function Testemonials() {
               <CarouselContainer/>
           </div>
         </div>
-        <button className="w-60 flex items-center justify-center p-3 text-white bg-bluePrimary hover:shadow-2xl ease-linear rounded-xl gap-3 text-[1.1rem] font-semibold">
+        <Link href='/agendamento' className="w-60 flex items-center justify-center p-3 text-white bg-bluePrimary hover:shadow-2xl ease-linear rounded-xl gap-3 text-[1.1rem] font-semibold">
             Agendar consulta
             <MoveRight />
-        </button>
+        </Link>
     </section>
   )
 }

@@ -73,7 +73,7 @@ export default function Home() {
       const { result, error } = await SignInWithGoogle();
       if (result) {
         setLoadUser(false);
-        return router.push('/');
+        return router.push('/agendamento');
       } else {
         console.error('Error signing in with Google:', error);
         setLoadUser(false);

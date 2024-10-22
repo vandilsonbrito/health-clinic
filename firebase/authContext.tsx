@@ -2,24 +2,19 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from './firebaseAuthConfig';
+import { AuthContextType } from '@/utils/types';
 
-interface AuthContextType {
-    userAuth: User | null;
-    login: (email: string, password: string) => Promise<void>;
-    logout: () => Promise<void>;
-    loading: boolean; 
-}
 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [userAuth, setUserAuth] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [authLoading, setAuthLoading] = useState(true);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUserAuth(currentUser);
-            setLoading(false)
+            setAuthLoading(false)
         });
 
         // Cleanup subscription on unmount
@@ -52,11 +47,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ userAuth, login, logout, loading }}>
-            { !loading && children }
+        <AuthContext.Provider value={{ userAuth, login, logout, authLoading }}>
+            {  authLoading 
+                ? 
+                        <div className="w-full h-full min-h-screen flex flex-col justify-center items-center">
+                            <p className='text-lg mb-4'>Carregando</p>
+                            <span className="loader"></span>
+                        </div> 
+                : 
+                children
+            }
         </AuthContext.Provider>
     )
-};
+};  
 
 // Hook personalizado para usar o AuthContext
 export const useAuth = () => {

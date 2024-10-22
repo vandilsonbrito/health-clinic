@@ -68,4 +68,76 @@
   }
 }
 
+/* Spinner Loader */
+.loader {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  position: relative;
+  animation: rotate 1s linear infinite
+}
+.loader::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  inset: 0px;
+  border-radius: 50%;
+  border: 5px solid #000000;
+  animation: prixClipFix 2s linear infinite ;
+}
 
+@keyframes rotate {
+  100%   {transform: rotate(360deg)}
+}
+
+@keyframes prixClipFix {
+    0%   {clip-path:polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)}
+    25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)}
+    50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
+    75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 100%)}
+    100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 0)}
+}
+/* End */
+
+/* Table */
+ table td{
+  @apply p-2;
+  border: 1px solid #bec5d6;
+  border-collapse: collapse;  
+}
+tbody tr {
+  @apply text-center
+}
+.availableDate tbody tr:nth-child(odd) {
+  background-color:#e9f1f8da;
+}
+.availableDate tbody tr:nth-child(even) {
+  background-color:#fff;
+}
+table button {
+  @apply w-full h-full hover:bg-bluePrimary hover:text-white transform ease-linear duration-200
+}
+/* end */
+
+/* Schedule Appointment -> selected step */
+.selected-container {
+  @apply bg-blueSecundary text-white;
+}
+.selected-option {
+  @apply bg-bluePrimary text-white;
+}
+/* end */
+
+/* Buttons */
+.btn {
+  @apply transform ease-linear duration-200 active:scale-x-[.98];
+}
+/* end */
+
+/* Modal */
+.customModal {
+  border-radius: 50px;
+  max-width: 500px;
+  width: 100%;
+}
+/* end */

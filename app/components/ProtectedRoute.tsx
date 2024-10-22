@@ -1,18 +1,19 @@
-import { useRouter } from 'next/router';
+'use client'
+import { useRouter } from 'next/navigation';
 import { useAuth } from '../../firebase/authContext';
 import { useEffect } from 'react';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-    const { userAuth, loading } = useAuth();
+    const { userAuth, authLoading } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
-        if(!loading && !userAuth) {
-            router.push('/login');
+        if(!authLoading && !userAuth) {
+            router.push('/sign-in');
         }
-    }, [userAuth, loading, router]);
+    }, [userAuth, authLoading, router]);
 
-    if(loading) return <div className="w-full min-h-screen flex flex-col justify-center items-center"><p>Loading...</p></div>
+    if(authLoading) return <div className="w-full min-h-screen flex flex-col justify-center items-center"><p>Loading...</p></div>
 
     return userAuth ? <>{children}</> : null;
 };

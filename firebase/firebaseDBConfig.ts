@@ -1,5 +1,5 @@
 import { initializeApp, getApps  } from "firebase/app";
-import { getFirestore } from 'firebase/firestore';
+import { getDatabase  } from 'firebase/database';
 
 const firebaseConfig = {
 
@@ -15,7 +15,7 @@ const firebaseConfig = {
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
-// Inicializa o Firebase Realtime Database e obtém uma referência ao serviço
-const database = getFirestore(app);
+// Inicializa o Firebase Firestore Database e obtém uma referência ao serviço
+const database = getDatabase (app);
 
 export { database };
