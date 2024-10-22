@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function CarouselAppointContainer({ url, especiality, professionalName }: { url: StaticImageData, especiality: string, professionalName: string }) {
 
-    const { addEspeciality, removeEspeciality, selectedEspeciality, selectedDate, removeDate } = useGlobalStore();
+    const { addEspeciality, removeEspeciality, selectedEspeciality, selectedDate, removeDate, setJumpToNextStep } = useGlobalStore();
 
     const handleChooseProfessional = () => {
       if(selectedEspeciality.length > 0){
@@ -17,7 +17,8 @@ export default function CarouselAppointContainer({ url, especiality, professiona
             removeDate([item])
         })
       }
-      addEspeciality([professionalName, especiality])
+      addEspeciality([professionalName, especiality]);
+      setJumpToNextStep(true);
     }
   
     return (
