@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { FaCalendarCheck } from 'react-icons/fa';
-import ModalCancelAppointment from './ModalCancelAppointment';
+import CancelAppointmentModal from './CancelAppointmentModal';
+import { Button } from '@/components/ui/button';
+import useGlobalStore from '@/utils/globalStorage';
 
 export default function ScheduledConsultation() {
 
@@ -11,10 +13,11 @@ export default function ScheduledConsultation() {
         dataAppointment: '29/11/2024 - 07:00'
     }];
 
-    const [appointments, setAppointments] = useState()
+    const [appointments, setAppointments] = useState<ReactElement[]>();
+    const { setIsCancelAppointmentModalOpen } = useGlobalStore();
 
     useEffect(() => {
-        let auxArr = []; 
+        const auxArr: ReactElement[] = []; 
         const displayAppointments = () => {
             appointment.map((item) => {
                 auxArr.push(
@@ -51,10 +54,14 @@ export default function ScheduledConsultation() {
                     </tbody>
                 </table>
                 <div className='w-full h-full flex justify-center items-center mt-2'>
-                    {/* <Button
+                    <Button
+                        onClick={() => setIsCancelAppointmentModalOpen(true)}
                         className='btn w-60 font-semibold bg-red-600 hover:shadow-2xl hover:bg-red-600 '
-                    >Cancelar Consulta</Button> */}
-                    <ModalCancelAppointment />
+                    >   
+                        Cancelar Consulta
+                        <CancelAppointmentModal />
+                    </Button>
+                    {/* AO CANCELAR A CONSULTA COLOCAR EFEITO DE LOADING E DEPOIS CONFIRMAÇÃO OU ERRO AO CANCELAR */}
                 </div>
             </div>
 
