@@ -123,4 +123,15 @@ table button {
 .selected-container {
   @apply bg-blueSecundary text-white;
 }
+.selected-option {
+  @apply bg-bluePrimary text-white;
+}
+/* end */
+
+/* Buttons */
+.btn {
+  @apply transform ease-linear duration-200 active:scale-x-[.98];
+}
+/* end */
+
 /* end */
