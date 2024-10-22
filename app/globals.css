@@ -100,7 +100,7 @@
 /* End */
 
 /* Table */
-table td{
+ table td{
   @apply p-2;
   border: 1px solid #bec5d6;
   border-collapse: collapse;  
@@ -108,10 +108,10 @@ table td{
 tbody tr {
   @apply text-center
 }
-tbody tr:nth-child(odd) {
+.availableDate tbody tr:nth-child(odd) {
   background-color:#e9f1f8da;
 }
-tbody tr:nth-child(even) {
+.availableDate tbody tr:nth-child(even) {
   background-color:#fff;
 }
 table button {
@@ -134,4 +134,10 @@ table button {
 }
 /* end */
 
+/* Modal */
+.customModal {
+  border-radius: 50px;
+  max-width: 500px;
+  width: 100%;
+}
 /* end */
