@@ -27,4 +27,4 @@ Uso de metodologias ágeis como Kanban e Scrum, foi criado um projeto na seção
 
 <h2>Demo</h2>
 
-[recommended-books](https://health-clinic-beta.vercel.app/)
+[health-clinic](https://health-clinic-beta.vercel.app/)
