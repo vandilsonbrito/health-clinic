@@ -20,7 +20,7 @@ export default function Header() {
 
     return (
       <header className='w-full h-[4.5rem] flex justify-center items-center font-medium px-5 md:px-14 bg-white shadow-lg sticky top-0 z-50' >
-          <div className="w-full h-full max-w-7xl flex justify-between items-center">
+          <div className="w-full h-full flex justify-between items-center">
             <Image src={Logo} alt="Logo" className='w-[5.5rem]' width={200} height={200}/>
 
             {
@@ -32,7 +32,7 @@ export default function Header() {
               )
               :
               (
-                <nav className='w-full max-w-[35rem]'>
+                <nav className='w-full '>
                     <ul className='w-full flex items-center justify-end lg:justify-between'>
                         <li className="cursor-pointer hidden lg:block">
                           <Link to="top" smooth={true} duration={300} offset={-200}>Home</Link >
