@@ -16,10 +16,11 @@ export interface ProfessionalData {
     }
 }
 
-export interface selectedConsultationType {
+export interface AppointmentFormatType {
     especiality: string,
-    especialityName: string,
+    professionalName: string,
     date: string,
+    time: string
 }
 
 export interface SectionsObjType {
