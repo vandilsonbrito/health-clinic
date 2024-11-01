@@ -16,7 +16,7 @@ export default function ScheduledConsultation() {
         if(userAuth && userAuth.uid) {
             setUserId(userAuth.uid)
         } 
-    }, [userAuth?.uid])
+    }, [userAuth])
     const { data: userAppointmentData } = useGetAppointmentsDataFromDB({ route: `users/${userAuth?.uid}/appointments`, userID: userId });
     
     useEffect(() => {
@@ -75,10 +75,10 @@ export default function ScheduledConsultation() {
                             <div className="w-full h-full max-h-[calc(100vh-300px)] overflow-y-auto">
                                 <table className='w-full h-full'>
                                     <thead>
-                                        <tr className='bg-[#e9f1f8da]'>
-                                            <td className='uppercase text-center'>Data/Hora</td>
-                                            <td className='uppercase text-center'>Especialidade</td>
-                                            <td className='uppercase text-center'>Profissional</td>
+                                        <tr className='bg-[#e9f1f8da] font-semibold uppercase'>
+                                            <td className='text-center'>Data/Hora</td>
+                                            <td className='text-center'>Profissional</td>
+                                            <td className='text-center'>Especialidade</td>
                                         </tr>
                                     </thead>
                                     <tbody>
