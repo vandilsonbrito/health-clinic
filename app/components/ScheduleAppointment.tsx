@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import { FaCalendarAlt, FaCheckCircle  } from 'react-icons/fa';
 import { FaUserDoctor, FaRegClock  } from "react-icons/fa6";
-import SpecialitiesAvailable from './Appointment/AvailableSpecialities';
-import DateAvailable from './Appointment/AvailableDate';
+import AvailableSpecialities from './Appointment/AvailableSpecialities';
+import AvailableDate from './Appointment/AvailableDate';
 import FinishAppointment from './Appointment/FinishAppointment';
 import { SectionsObjType } from '../../utils/types';
 import useGlobalStore from '@/utils/globalStorage';
@@ -13,15 +13,15 @@ import { Button } from '@/components/ui/button';
 
 export default function ScheduleAppointment() {
     
-    const { selectedEspeciality, selectedDate, returnToFirstStep, setReturnToFirstStep, jumpToNextStep } = useGlobalStore();
+    const { selectedEspeciality, selectedDate, returnToScheduleAppointmentFirstStep, setReturnToScheduleAppointmentFirstStep, jumpToScheduleAppointmentNextStep,  } = useGlobalStore();
 
     const [section, setSecion] = useState<React.ReactElement | null>(null);
     const [selectedStep, setSelectedStep] = useState<number>(1);
 
     const handleScheduleSection = (sectionNumber: number) => {
         const sections: SectionsObjType = {
-            1: <SpecialitiesAvailable />,
-            2: <DateAvailable />,
+            1: <AvailableSpecialities />,
+            2: <AvailableDate />,
             3: <FinishAppointment />
         }
         if((sectionNumber === 2 && !selectedEspeciality[0]) || (sectionNumber === 3 && !selectedDate[0])){
@@ -37,11 +37,11 @@ export default function ScheduleAppointment() {
     }
 
     useEffect(() => {
-        setSecion(<SpecialitiesAvailable />);
+        setSecion(<AvailableSpecialities />);
     }, []);
 
     useEffect(()=> {
-        if(jumpToNextStep) {
+        if(jumpToScheduleAppointmentNextStep) {
             const delay = setTimeout(() => {
                 handleScheduleSection(selectedStep + 1);
             }, 500);
@@ -49,15 +49,15 @@ export default function ScheduleAppointment() {
 
             return () => clearTimeout(delay);
         }
-    }, [jumpToNextStep])
+    }, [jumpToScheduleAppointmentNextStep])
 
     useEffect(() => {
-        if(returnToFirstStep) {
-            setSecion(<SpecialitiesAvailable />);
+        if(returnToScheduleAppointmentFirstStep) {
+            setSecion(<AvailableSpecialities />);
             setSelectedStep(1);
         } 
-        setReturnToFirstStep(false);
-    }, [returnToFirstStep]);
+        setReturnToScheduleAppointmentFirstStep(false);
+    }, [returnToScheduleAppointmentFirstStep]);
     
     return (
         <>
