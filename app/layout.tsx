@@ -3,6 +3,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import "aos/dist/aos.css";
 import { AuthProvider } from "../firebase/authContext";
+import QueryClientProvider from "../utils/providers/ReactQueryProvider";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -27,9 +28,11 @@ export default function RootLayout({
       <body
         className={`${montserrat.className} antialiased`}
       > 
-        <AuthProvider>  
-            {children}  
-        </AuthProvider>
+      <QueryClientProvider>
+          <AuthProvider>  
+              {children}  
+          </AuthProvider>
+      </QueryClientProvider>
       </body>
     </html>
   );
