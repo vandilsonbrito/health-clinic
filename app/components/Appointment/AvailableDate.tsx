@@ -1,35 +1,19 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { getData } from '@/firebase/databaseFunc';
-import { ProfessionalData } from '@/utils/types';
+import React, { useEffect } from 'react';
+import { useDataFromDB } from '@/firebase/databaseFunc';
 import useGlobalStore from '../../../utils/globalStorage';
 
 export default function AvailableDate() {
 
-    const [agendaData, setAgendaData] = useState<ProfessionalData | null>(null);
-    const { addDate, removeDate, selectedEspeciality, selectedDate, setJumpToNextStep } = useGlobalStore();
+    const { addDate, removeDate, selectedEspeciality, selectedDate, setJumpToScheduleAppointmentNextStep } = useGlobalStore();
+    
+    const formattedName: string = selectedEspeciality[0].toLowerCase().replaceAll(' ', '-');
+    const formattedespeciality: string = selectedEspeciality[1].toLowerCase();
+    const { data: specialistsAgendaData } = useDataFromDB({route: `services/consultation/${formattedespeciality}/${formattedName}`});
 
     useEffect(() => {
-        const formattedName: string = selectedEspeciality[0].toLowerCase().replaceAll(' ', '-');
-        const formattedespeciality: string = selectedEspeciality[1].toLowerCase()
-        console.log('Route', `services/consultation/${formattedespeciality}/${formattedName}`)
-
-        async function fetchData() {
-            const data = getData({route: `services/consultation/${formattedespeciality}/${formattedName}`});
-            if(data) {
-                setAgendaData(await data);
-            }
-        }
-        fetchData();
-
-        setJumpToNextStep(false);
-    }, []);
-
-    /* useEffect(() => {
-        console.log("Agenda",  agendaData?.agenda.date);
-        console.log("selectedEspeciality", selectedEspeciality);
-        console.log("selectedDate", selectedDate);
-    }, [agendaData, selectedEspeciality]); */
+        setJumpToScheduleAppointmentNextStep(false);
+    }, [setJumpToScheduleAppointmentNextStep]);
 
     const handleDateClick = (date: string, time: string) => {
         if(selectedDate.length > 0){
@@ -38,24 +22,24 @@ export default function AvailableDate() {
             })
         }
         addDate([date, time]);
-        setJumpToNextStep(true);
+        setJumpToScheduleAppointmentNextStep(true);
     }
 
     const displayAgenda = () => {
         let arrAux: React.JSX.Element[] = [];
         const arrAux2: React.JSX.Element[] = [];
-        if (agendaData) {
-            agendaData.agenda.date.map((date, index) => {
+        if (specialistsAgendaData) {
+            specialistsAgendaData?.agenda?.date?.map((date: string, index: number) => {
                 arrAux.push(
-                    <tr>
+                    <tr key={index}>
                         <td>
                             <button
                                 className={`${selectedDate[0] === date ? 'selected-container' : ''}`} 
-                                onClick={() => handleDateClick(date, agendaData.agenda.time[index])}>{date}
+                                onClick={() => handleDateClick(date, specialistsAgendaData.agenda.time[index])}>{date}
                             </button>
                         </td>
-                        <td>{agendaData.agenda.time[index]}</td>
-                        <td className='uppercase'>{agendaData.especiality}</td>
+                        <td>{specialistsAgendaData.agenda.time[index]}</td>
+                        <td className='uppercase'>{specialistsAgendaData.especiality}</td>
                     </tr>
                 )
                 if(arrAux.length > 3) {
@@ -77,9 +61,12 @@ export default function AvailableDate() {
 
     return (
         <div className='w-full h-full flex flex-col gap-4  availableDate'>
-            <h2 className='font-medium'>Datas Disponíveis</h2>
+            <div>
+                <h2 className='font-medium mt-1'>Datas Disponíveis</h2>
+                <p className='text-[.7rem]'>* Selecione uma data</p>
+            </div>
             {
-                agendaData ?
+                specialistsAgendaData ?
                 (
                     <div className="flex flex-col items-center lg:flex-row gap-1">
                         {displayAgenda()}
