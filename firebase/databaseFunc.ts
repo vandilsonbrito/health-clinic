@@ -58,7 +58,7 @@ export const useGetAppointmentsDataFromDB = ({ route, userID }: { route: string,
 
   const query = useQuery({
     queryFn: fetchDataFromDB,
-    queryKey: ['data'],
+    queryKey: ['user-appointments-data'],
     enabled: !!userID
   })
   return query;
