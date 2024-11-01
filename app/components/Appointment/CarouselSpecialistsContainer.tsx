@@ -2,9 +2,9 @@ import useGlobalStore from '@/utils/globalStorage';
 import Image, { StaticImageData } from 'next/image'
 import React from 'react'
 
-export default function CarouselAppointContainer({ url, especiality, professionalName }: { url: StaticImageData, especiality: string, professionalName: string }) {
+export default function CarouselSpecialistsContainer({ url, especiality, professionalName }: { url: StaticImageData, especiality: string, professionalName: string }) {
 
-    const { addEspeciality, removeEspeciality, selectedEspeciality, selectedDate, removeDate, setJumpToNextStep } = useGlobalStore();
+    const { addEspeciality, removeEspeciality, selectedEspeciality, selectedDate, removeDate, setJumpToScheduleAppointmentNextStep } = useGlobalStore();
 
     const handleChooseProfessional = () => {
       if(selectedEspeciality.length > 0){
@@ -18,7 +18,7 @@ export default function CarouselAppointContainer({ url, especiality, professiona
         })
       }
       addEspeciality([professionalName, especiality]);
-      setJumpToNextStep(true);
+      setJumpToScheduleAppointmentNextStep(true);
     }
   
     return (
