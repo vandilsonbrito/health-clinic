@@ -1,5 +1,5 @@
 import React from 'react';
-import Logo from '../../public/logo-clinia-saude-white.png';
+import Logo from '../../../public/logo-clinia-saude-white.png';
 import { RxInstagramLogo } from "react-icons/rx";
 import { FaWhatsapp } from "react-icons/fa";
 import Image from 'next/image';

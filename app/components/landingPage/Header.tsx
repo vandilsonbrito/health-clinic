@@ -2,10 +2,10 @@
 //import { Button } from '@/components/ui/button';
 import { Link } from 'react-scroll';
 import React, { useEffect } from 'react';
-import Logo from '../../public/logo-clinica-saude.png';
+import Logo from '../../../public/logo-clinica-saude.png';
 import Image from 'next/image';
 import BtnLogIn from './BtnLogIn';
-import { useAuth } from '../../firebase/authContext';
+import { useAuth } from '../../../firebase/authContext';
 import { Button } from '@/components/ui/button';
 
 export default function Header() {
