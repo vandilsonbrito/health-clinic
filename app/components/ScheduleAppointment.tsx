@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button';
 
 export default function ScheduleAppointment() {
     
-    const { selectedEspeciality, selectedDate, returnToScheduleAppointmentFirstStep, setReturnToScheduleAppointmentFirstStep, jumpToScheduleAppointmentNextStep,  } = useGlobalStore();
+    const { selectedEspeciality, selectedDate, returnToScheduleAppointmentFirstStep, setReturnToScheduleAppointmentFirstStep, jumpToScheduleAppointmentNextStep } = useGlobalStore();
 
     const [section, setSecion] = useState<React.ReactElement | null>(null);
     const [selectedStep, setSelectedStep] = useState<number>(1);
