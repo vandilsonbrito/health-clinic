@@ -32,7 +32,7 @@ export default function Header() {
               )
               :
               (
-                <nav className='w-full '>
+                <nav className='w-full max-w-xl'>
                     <ul className='w-full flex items-center justify-end lg:justify-between'>
                         <li className="cursor-pointer hidden lg:block">
                           <Link to="top" smooth={true} duration={300} offset={-200}>Home</Link >
