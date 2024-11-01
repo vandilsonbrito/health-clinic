@@ -5,15 +5,17 @@ import Header from '../components/Header';
 import { FaCalendarAlt, FaCalendarCheck, FaUserCircle   } from "react-icons/fa";
 import ScheduleAppointment from '../components/ScheduleAppointment';
 import ProtectedMobileHeader from '../components/ProtectedMobileHeader';
-import { useAuth } from '@/firebase/authContext';
+//import { useAuth } from '@/firebase/authContext';
 import ScheduledConsultation from '../components/ScheduledConsultation';
 import UpdateProfile from '../components/UpdateProfile';
 import { SectionsObjType } from '@/utils/types';
+import useGlobalStore from '@/utils/globalStorage';
 
 
 export default function Agendamento() {
 
-    const { userAuth, authLoading, login, logout } = useAuth();
+    //const { userAuth, authLoading, login, logout } = useAuth();
+    const { isAppointmentScheduled } = useGlobalStore();
     const [section, setSecion] = useState<React.ReactElement | null>(null);
     const [selectedStep, setSelectedStep] = useState<number>(1);
 
@@ -31,6 +33,17 @@ export default function Agendamento() {
         setSecion(<ScheduleAppointment/>);
     }, []);
 
+    useEffect(() => {
+        if(isAppointmentScheduled) {
+            const waitInterval = setTimeout(() => {
+                setSecion(<ScheduledConsultation />);
+                setSelectedStep(2)
+            }, 1000);
+
+            return () => clearTimeout(waitInterval); 
+        }
+    }, [isAppointmentScheduled]);
+
     return (
         <ProtectedRoute>
             <div className="hidden xl:block">
@@ -40,9 +53,9 @@ export default function Agendamento() {
                 <ProtectedMobileHeader/>
             </div>
             
-            <main className='w-full h-full min-h-[calc(100vh-4.5rem)] flex items-start bg-white'>
-                <section className="w-[20%] h-full min-h-[calc(100vh-4.5rem)] bg-blueSecundary pb-5 text-white  hidden xl:block">
-                    <nav className="w-full h-full flex flex-col py-8">
+            <main className='w-full h-full min-h-[calc(100vh-4.5rem)] flex items-start bg-white '>
+                <section className="w-[20%] 2xl:w-[30%] h-full min-h-[calc(100vh-4.5rem)] bg-blueSecundary pb-5 text-white  hidden xl:block ">
+                    <nav className="w-full h-full flex flex-col py-5">
                         <ul className='flex flex-col gap-2'>
                             <li>
                                 <button
@@ -71,7 +84,7 @@ export default function Agendamento() {
                         </ul>
                     </nav>
                 </section>
-                <section className="w-full xl:w-[80%] h-full p-2">
+                <section className="w-full xl:w-[80%] 2xl:w-[70%] h-full p-2">
                     {section}
                 </section>
             </main>
