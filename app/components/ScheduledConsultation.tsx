@@ -20,6 +20,7 @@ export default function ScheduledConsultation() {
     const { data: userAppointmentData } = useGetAppointmentsDataFromDB({ route: `users/${userAuth?.uid}/appointments`, userID: userId });
     
     useEffect(() => {
+        
         const arrAux = []
         for(const appointmentIDs in userAppointmentData) {
             arrAux.push(userAppointmentData[appointmentIDs][0])
@@ -70,7 +71,7 @@ export default function ScheduledConsultation() {
                             <span className="loader"></span>
                         </div> } >
                     {
-                        appointmentsFromDB.length > 0 &&
+                        appointmentsFromDB.length > 0 ?
                         (
                             <div className="w-full h-full max-h-[calc(100vh-300px)] overflow-y-auto">
                                 <table className='w-full h-full'>
@@ -87,9 +88,15 @@ export default function ScheduledConsultation() {
                                 </table>
                             </div>
                         )
+                        :
+                        (
+                            <div className="w-full h-full min-h-[13rem] flex flex-col justify-center items-center">
+                                <p className=''>Você ainda não tem consultas agendadas.</p>
+                            </div>
+                        )
                     }
                 </Suspense>
-                <div className='w-full h-full flex justify-center items-center mt-2'>
+                <div className={appointmentsFromDB.length > 0 ? `w-full h-full flex justify-center items-center mt-2` : 'hidden'}>
                     <Button
                         onClick={() => setIsCancelAppointmentModalOpen(true)}
                         className='btn w-60 font-semibold bg-red-600 hover:shadow-2xl hover:bg-red-600 '
@@ -97,6 +104,7 @@ export default function ScheduledConsultation() {
                         Cancelar Consulta
                         <CancelAppointmentModal />
                     </Button>
+                    {/* Criar opção de escolher qual consulta cancelar se tiver mais de uma */}
                     {/* AO CANCELAR A CONSULTA COLOCAR EFEITO DE LOADING E DEPOIS CONFIRMAÇÃO OU ERRO AO CANCELAR */}
                 </div>
             </div>
