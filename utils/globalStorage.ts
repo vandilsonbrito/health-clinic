@@ -1,38 +1,26 @@
 import { create } from 'zustand';
-import { selectedConsultationType } from './types';
 
 export type State = {
-    selectedConsultation: selectedConsultationType[]
     selectedEspeciality: string[]
     selectedDate: string[],
-    returnToFirstStep: boolean
-    jumpToNextStep: boolean, 
-    isCancelAppointmentModalOpen: boolean
+    returnToScheduleAppointmentFirstStep: boolean
+    jumpToScheduleAppointmentNextStep: boolean, 
+    isCancelAppointmentModalOpen: boolean, 
+    isAppointmentScheduled: boolean
 };
 
 export type Action = {
-    addConsultation: (selectedConsultation: State['selectedConsultation']) => void,
-    removeConsultation: (selectedConsultation: State['selectedConsultation']) => void,
     addEspeciality: (selectedEspeciality: State['selectedEspeciality']) => void,
     removeEspeciality: (selectedEspeciality: State['selectedEspeciality']) => void,
     addDate: (selectedDate: State['selectedDate']) => void,
     removeDate: (selectedDate: State['selectedDate']) => void,
-    setReturnToFirstStep: (returnToFirstStep: State['returnToFirstStep']) => void,
-    setJumpToNextStep: (jumpToNextStep: State['jumpToNextStep']) => void,
-    setIsCancelAppointmentModalOpen: (isCancelAppointmentModalOpen: State['isCancelAppointmentModalOpen']) => void
+    setReturnToScheduleAppointmentFirstStep: (returnToScheduleAppointmentFirstStep: State['returnToScheduleAppointmentFirstStep']) => void,
+    setJumpToScheduleAppointmentNextStep: (jumpToScheduleAppointmentNextStep: State['jumpToScheduleAppointmentNextStep']) => void,
+    setIsCancelAppointmentModalOpen: (isCancelAppointmentModalOpen: State['isCancelAppointmentModalOpen']) => void,
+    setIsAppointmentScheduled: (isAppointmentScheduled: State['isAppointmentScheduled']) => void
 };
 
 const useGlobalStore = create <State & Action>((set) => ({
-    selectedConsultation: [],
-    addConsultation: (selectedConsultation) => 
-        set((state) => ({
-            selectedConsultation: [...state.selectedConsultation, ...selectedConsultation]
-    })),
-    removeConsultation: (selectedConsultation) => 
-        set((state) => ({                              // será vddeira qdo o gênero não estiver presente 
-        selectedConsultation: state.selectedConsultation.filter(consultation => !selectedConsultation.includes(consultation)) 
-    })),
-
     selectedEspeciality: [],
     addEspeciality: (selectedEspeciality) =>
         set((state) => ({                              
@@ -53,12 +41,14 @@ const useGlobalStore = create <State & Action>((set) => ({
             selectedDate: state.selectedDate.filter(especiality => !selectedDate.includes(especiality))
     })),
 
-    returnToFirstStep: false,
-    setReturnToFirstStep: (value: boolean) => set({ returnToFirstStep: value }),
-    jumpToNextStep: false,
-    setJumpToNextStep: (value: boolean) => set({ jumpToNextStep: value}),
+    returnToScheduleAppointmentFirstStep: false,
+    setReturnToScheduleAppointmentFirstStep: (value: boolean) => set({ returnToScheduleAppointmentFirstStep: value }),
+    jumpToScheduleAppointmentNextStep: false,
+    setJumpToScheduleAppointmentNextStep: (value: boolean) => set({ jumpToScheduleAppointmentNextStep: value}),
     isCancelAppointmentModalOpen: false,
     setIsCancelAppointmentModalOpen: (value: boolean) => set({ isCancelAppointmentModalOpen: value}),
+    isAppointmentScheduled: false,
+    setIsAppointmentScheduled: (value: boolean) => set({ isAppointmentScheduled: value })
 
 }));
 
