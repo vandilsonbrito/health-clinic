@@ -1,41 +1,58 @@
+'use client';
 import React, { ReactElement, Suspense, useEffect, useState } from 'react';
 import { FaCalendarCheck } from 'react-icons/fa';
-import CancelAppointmentModal from './CancelAppointmentModal';
-import { Button } from '@/components/ui/button';
-import useGlobalStore from '@/utils/globalStorage';
-import { useGetAppointmentsDataFromDB } from '@/firebase/databaseFunc';
+import { useGetAppointmentsDataFromDB } from '@/firebase/databaseCRUDFunctions';
 import { useAuth } from '@/firebase/authContext';
 import { AppointmentFormatType } from '@/utils/types';
+import CancelAppointment from './CancelAppointment';
+import useGlobalStore from '@/utils/globalStorage';
 
 export default function ScheduledConsultation() {
 
     const { userAuth } = useAuth();
     const [userId, setUserId] = useState<string>('');
     const [appointmentsFromDB, setAppointmentsFromDB] = useState<AppointmentFormatType[]>([]);
+    const [appointmentsNode, setAppointmentsNode] = useState<ReactElement[]>();
+    const [appointmentIds, setAppointmentIds] = useState<string[]>([]);
+    const [removeSelectedAppointmentID, setRemoveSelectedAppointmentID] = useState<string>('');
+    const { showDeleteAppointmentMessage, respondedValueModalAppointmentCancel, removeSelectedAppointment, setRemoveSelectedAppointment } = useGlobalStore();
+
     useEffect(() => {
         if(userAuth && userAuth.uid) {
             setUserId(userAuth.uid)
         } 
     }, [userAuth])
-    const { data: userAppointmentData } = useGetAppointmentsDataFromDB({ route: `users/${userAuth?.uid}/appointments`, userID: userId });
+    const { data: userAppointmentData, refetch} = useGetAppointmentsDataFromDB({ route: `users/${userAuth?.uid}/appointments`, userID: userId });
+
+    useEffect(() => {
+        if(!respondedValueModalAppointmentCancel) return;
+
+        refetch();
+    }, [respondedValueModalAppointmentCancel])
+    
     
     useEffect(() => {
-        
-        const arrAux = []
+        const arrAux: string[] = [];
+        const arrAux2: AppointmentFormatType[] = [];
         for(const appointmentIDs in userAppointmentData) {
-            arrAux.push(userAppointmentData[appointmentIDs][0])
+            arrAux.push(appointmentIDs);
+            arrAux2.push(userAppointmentData[appointmentIDs][0]);
         }
-        setAppointmentsFromDB(arrAux)
+        setAppointmentIds(arrAux);
+        setAppointmentsFromDB(arrAux2);
         console.log("userAppointmentData", userAppointmentData)
     }, [userAppointmentData]);
-
+/* CONSOLE.LOG */
     useEffect(() => {
         console.log("appointmentsFromDB", appointmentsFromDB)
     }, [appointmentsFromDB])
-
-
-    const [appointmentsNode, setAppointmentsNode] = useState<ReactElement[]>();
-    const { setIsCancelAppointmentModalOpen } = useGlobalStore();
+    
+    const handleAppointmentClick = (date: string, time: string) => {
+        if(removeSelectedAppointment.length > 0){
+            setRemoveSelectedAppointment([]);
+        }
+        setRemoveSelectedAppointment([date, time]);
+    }
 
     useEffect(() => {
         if(appointmentsFromDB.length > 0) {
@@ -44,7 +61,14 @@ export default function ScheduledConsultation() {
                 appointmentsFromDB.map((item: AppointmentFormatType, index: number) => {
                     auxArr.push(
                         <tr key={index} className="w-full uppercase">
-                            <td>{`${item?.date} - ${item?.time}`}</td>
+                            
+                            <td>
+                                <button
+                                    className={(removeSelectedAppointment[0] === item?.date && removeSelectedAppointment[1] === item?.time) ? 'selected-container' : ''} 
+                                    onClick={() => handleAppointmentClick(item?.date, item?.time)}>
+                                    {item?.date} - {item?.time}
+                                </button>
+                            </td>
                             <td>{item?.especiality}</td>
                             <td>{item?.professionalName}</td>
                         </tr>
@@ -54,7 +78,15 @@ export default function ScheduledConsultation() {
             }
             displayAppointments();
         }
-    }, [appointmentsFromDB])
+    }, [appointmentsFromDB, removeSelectedAppointment]);
+
+    useEffect(() => {
+        for(const appointmentIDs in userAppointmentData) {
+            if(userAppointmentData[appointmentIDs][0].date === removeSelectedAppointment[0] && userAppointmentData[appointmentIDs][0].time === removeSelectedAppointment[1]) {
+                setRemoveSelectedAppointmentID(appointmentIDs);
+            }
+        }
+    }, [userAppointmentData, appointmentIds, removeSelectedAppointment])
 
     return (
         <div className='w-full h-full'>
@@ -65,11 +97,13 @@ export default function ScheduledConsultation() {
 
             <div className="w-full h-full border flex flex-col gap-4  mt-5 p-2">
                 <h2 className='font-medium'>Próxima(s) Consultas</h2>
+                { showDeleteAppointmentMessage && <p className='text-[.7rem]'>*Selecione Data/Horário para cancelar</p> }
                 <Suspense fallback={
-                    <div className="w-full h-full min-h-[13rem] flex flex-col justify-center items-center">
+                        <div className="w-full h-full min-h-[13rem] flex flex-col justify-center items-center">
                             <p className='text-lg mb-4'>Loading</p>
                             <span className="loader"></span>
-                        </div> } >
+                        </div> 
+                    } >
                     {
                         appointmentsFromDB.length > 0 ?
                         (
@@ -97,15 +131,8 @@ export default function ScheduledConsultation() {
                     }
                 </Suspense>
                 <div className={appointmentsFromDB.length > 0 ? `w-full h-full flex justify-center items-center mt-2` : 'hidden'}>
-                    <Button
-                        onClick={() => setIsCancelAppointmentModalOpen(true)}
-                        className='btn w-60 font-semibold bg-red-600 hover:shadow-2xl hover:bg-red-600 '
-                    >   
-                        Cancelar Consulta
-                        <CancelAppointmentModal />
-                    </Button>
-                    {/* Criar opção de escolher qual consulta cancelar se tiver mais de uma */}
-                    {/* AO CANCELAR A CONSULTA COLOCAR EFEITO DE LOADING E DEPOIS CONFIRMAÇÃO OU ERRO AO CANCELAR */}
+                    <CancelAppointment appointmentId={removeSelectedAppointmentID} userId={userId}
+                    />
                 </div>
             </div>
 
