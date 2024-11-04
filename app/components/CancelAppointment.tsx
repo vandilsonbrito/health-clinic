@@ -14,9 +14,8 @@ export default function CancelAppointment({ appointmentId, userId }: { appointme
     useEffect(() => {
         const deleteAppointment = async () => {
             if (respondedValueModalAppointmentCancel) {
-                console.log("Route", `users/${userId}/appointments/${appointmentId}`);
+
                 const itWasDeleted = await deleteDBData({ route: `users/${userId}/appointments/${appointmentId}` });
-                // Pegar retorno da função para acabar com efeito de loading quando retornar sucesso
                 if (itWasDeleted === 'Data removed successfully') {
                     setIsCancelAppointmentBtnClicked(false);
                     setShowDeleteAppointmentMessage(false);
@@ -27,6 +26,7 @@ export default function CancelAppointment({ appointmentId, userId }: { appointme
         };
     
         deleteAppointment();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [respondedValueModalAppointmentCancel]);
 
 
@@ -44,13 +44,11 @@ export default function CancelAppointment({ appointmentId, userId }: { appointme
         <div>
             <Button
                 onClick={() => handleCancelAppointmentBtn()}
-                className={`btn w-60 font-semibold ${isCancelAppointmentBtnClicked ? 'bg-red-600 hover:bg-red-600' : 'bg-bluePrimary hover:bg-bluePrimary'} hover:shadow-2xl  `}
+                className={`btn w-60 font-semibold ${(isCancelAppointmentBtnClicked || removeSelectedAppointment.length > 0) ? 'bg-red-600 hover:bg-red-600' : 'bg-bluePrimary hover:bg-bluePrimary'} hover:shadow-2xl  `}
             >   
                 Cancelar Consulta
                 <CancelAppointmentModal />
             </Button>
-            {/* Criar opção de escolher qual consulta cancelar se tiver mais de uma */}
-            {/* AO CANCELAR A CONSULTA COLOCAR EFEITO DE LOADING E DEPOIS CONFIRMAÇÃO OU ERRO AO CANCELAR */}
         </div>
     )
 }
