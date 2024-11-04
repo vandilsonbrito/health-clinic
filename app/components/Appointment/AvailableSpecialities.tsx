@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import CarouselSpecialistsContainer from './CarouselSpecialistsContainer';
 import man2 from '../../../public/man2.jpg';
-import { useDataFromDB } from '@/firebase/databaseFunc';
+import { useDataFromDB } from '@/firebase/databaseCRUDFunctions';
 //import { ProfessionalData } from '@/utils/types';
 import useMedia from 'use-media';
 import useGlobalStore from '@/utils/globalStorage';

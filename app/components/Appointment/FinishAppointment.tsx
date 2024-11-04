@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { addDataToDB } from '@/firebase/databaseFunc';
+import { addDataToDB } from '@/firebase/databaseCRUDFunctions';
 import useGlobalStore from '@/utils/globalStorage';
 import { AppointmentFormatType } from '@/utils/types';
 import React, { useEffect, useState } from 'react';

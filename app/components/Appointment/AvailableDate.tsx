@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect } from 'react';
-import { useDataFromDB } from '@/firebase/databaseFunc';
+import { useDataFromDB } from '@/firebase/databaseCRUDFunctions';
 import useGlobalStore from '../../../utils/globalStorage';
 
 export default function AvailableDate() {

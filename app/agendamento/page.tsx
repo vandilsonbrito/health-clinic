@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import ProtectedRoute from '../components/ProtectedRoute';
-import Header from '../components/Header';
+import Header from '../components/landingPage/Header';
 import { FaCalendarAlt, FaCalendarCheck, FaUserCircle   } from "react-icons/fa";
 import ScheduleAppointment from '../components/ScheduleAppointment';
 import ProtectedMobileHeader from '../components/ProtectedMobileHeader';
