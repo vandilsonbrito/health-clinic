@@ -6,7 +6,11 @@ export type State = {
     returnToScheduleAppointmentFirstStep: boolean
     jumpToScheduleAppointmentNextStep: boolean, 
     isCancelAppointmentModalOpen: boolean, 
-    isAppointmentScheduled: boolean
+    isAppointmentScheduled: boolean,
+    isCancelAppointmentBtnClicked: boolean,
+    respondedValueModalAppointmentCancel: boolean,
+    showDeleteAppointmentMessage: boolean,
+    removeSelectedAppointment: string[]
 };
 
 export type Action = {
@@ -17,7 +21,11 @@ export type Action = {
     setReturnToScheduleAppointmentFirstStep: (returnToScheduleAppointmentFirstStep: State['returnToScheduleAppointmentFirstStep']) => void,
     setJumpToScheduleAppointmentNextStep: (jumpToScheduleAppointmentNextStep: State['jumpToScheduleAppointmentNextStep']) => void,
     setIsCancelAppointmentModalOpen: (isCancelAppointmentModalOpen: State['isCancelAppointmentModalOpen']) => void,
-    setIsAppointmentScheduled: (isAppointmentScheduled: State['isAppointmentScheduled']) => void
+    setIsAppointmentScheduled: (isAppointmentScheduled: State['isAppointmentScheduled']) => void,
+    setIsCancelAppointmentBtnClicked: (isCancelAppointmentBtnClicked: State['isCancelAppointmentBtnClicked']) => void,
+    setRespondedValueModalAppointmentCancel: (respondedValueModalAppointmentCancel: State['respondedValueModalAppointmentCancel']) => void,
+    setShowDeleteAppointmentMessage: (showDeleteAppointmentMessage: State['showDeleteAppointmentMessage']) => void,
+    setRemoveSelectedAppointment: (removeSelectedAppointment: State['removeSelectedAppointment']) => void
 };
 
 const useGlobalStore = create <State & Action>((set) => ({
@@ -48,7 +56,16 @@ const useGlobalStore = create <State & Action>((set) => ({
     isCancelAppointmentModalOpen: false,
     setIsCancelAppointmentModalOpen: (value: boolean) => set({ isCancelAppointmentModalOpen: value}),
     isAppointmentScheduled: false,
-    setIsAppointmentScheduled: (value: boolean) => set({ isAppointmentScheduled: value })
+    setIsAppointmentScheduled: (value: boolean) => set({ isAppointmentScheduled: value }),
+    isCancelAppointmentBtnClicked: false,
+    setIsCancelAppointmentBtnClicked: (value: boolean) => set({ isCancelAppointmentBtnClicked: value }),
+    respondedValueModalAppointmentCancel: false,
+    setRespondedValueModalAppointmentCancel: (value: boolean) => set({ respondedValueModalAppointmentCancel: value }),
+    showDeleteAppointmentMessage: false,
+    setShowDeleteAppointmentMessage: (value: boolean) => set({ showDeleteAppointmentMessage: value }),
+
+    removeSelectedAppointment: [],
+    setRemoveSelectedAppointment: (value: string[]) => set({ removeSelectedAppointment: value }),
 
 }));
 
