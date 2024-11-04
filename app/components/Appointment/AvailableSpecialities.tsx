@@ -6,7 +6,6 @@ import "slick-carousel/slick/slick-theme.css";
 import CarouselSpecialistsContainer from './CarouselSpecialistsContainer';
 import man2 from '../../../public/man2.jpg';
 import { useDataFromDB } from '@/firebase/databaseCRUDFunctions';
-//import { ProfessionalData } from '@/utils/types';
 import useMedia from 'use-media';
 import useGlobalStore from '@/utils/globalStorage';
 
@@ -14,9 +13,9 @@ export default function AvailableSpecialities() {
 
     const { data: specialistsData } = useDataFromDB({route: 'services/consultation'});
     const { setJumpToScheduleAppointmentNextStep } = useGlobalStore();
-    //const [servicesData, setServicesData] = useState<ProfessionalData[] | null>(null);
     const [especiality, setEspeciality] = useState<string[]>([]);
     const [professionalsName, setProfessionalsName] = useState<string[]>([]);
+    
     const isSuperMobile = useMedia({maxWidth: '400px'});
     const isMobile = useMedia({maxWidth: '530px'});
     const isMediumMobile = useMedia({maxWidth: '1020px'});
