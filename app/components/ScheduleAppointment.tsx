@@ -49,6 +49,7 @@ export default function ScheduleAppointment() {
 
             return () => clearTimeout(delay);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [jumpToScheduleAppointmentNextStep])
 
     useEffect(() => {
@@ -57,6 +58,7 @@ export default function ScheduleAppointment() {
             setSelectedStep(1);
         } 
         setReturnToScheduleAppointmentFirstStep(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [returnToScheduleAppointmentFirstStep]);
     
     return (
