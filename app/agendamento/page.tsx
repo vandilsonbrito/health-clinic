@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import ProtectedRoute from '../components/ProtectedRoute';
-import Header from '../components/Header';
+import Header from '../components/landingPage/Header';
 import { FaCalendarAlt, FaCalendarCheck, FaUserCircle   } from "react-icons/fa";
 import ScheduleAppointment from '../components/ScheduleAppointment';
 import ProtectedMobileHeader from '../components/ProtectedMobileHeader';
@@ -15,7 +15,7 @@ import useGlobalStore from '@/utils/globalStorage';
 export default function Agendamento() {
 
     //const { userAuth, authLoading, login, logout } = useAuth();
-    const { isAppointmentScheduled } = useGlobalStore();
+    const { isAppointmentScheduled, setIsAppointmentScheduled } = useGlobalStore();
     const [section, setSecion] = useState<React.ReactElement | null>(null);
     const [selectedStep, setSelectedStep] = useState<number>(1);
 
@@ -35,13 +35,15 @@ export default function Agendamento() {
 
     useEffect(() => {
         if(isAppointmentScheduled) {
-            const waitInterval = setTimeout(() => {
+            const waitInterval = setTimeout(() => { 
+                setSelectedStep(2);
                 setSecion(<ScheduledConsultation />);
-                setSelectedStep(2)
-            }, 1000);
+                setIsAppointmentScheduled(false);
+            }, 500);
 
             return () => clearTimeout(waitInterval); 
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAppointmentScheduled]);
 
     return (

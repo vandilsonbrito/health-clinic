@@ -1,11 +1,11 @@
-import Banner from "./components/Banner";
-import Testemonial from "./components/Testemonial";
-import Services from "./components/Services";
-import WhyUs from "./components/WhyUs";
-import WhoWeAre from "./components/WhoWeAre";
-import ScrollToTop from "./components/ScrollToTop";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Banner from "./components/landingPage/Banner";
+import Testemonial from "./components/landingPage/Testemonial";
+import Services from "./components/landingPage/Services";
+import WhyUs from "./components/landingPage/WhyUs";
+import WhoWeAre from "./components/landingPage/WhoWeAre";
+import ScrollToTop from "./components/landingPage/ScrollToTop";
+import Header from "./components/landingPage/Header";
+import Footer from "./components/landingPage/Footer";
 
 export default function Home() {
   return (

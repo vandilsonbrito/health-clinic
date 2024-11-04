@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { addDataToDB } from '@/firebase/databaseFunc';
+import { addDataToDB } from '@/firebase/databaseCRUDFunctions';
 import useGlobalStore from '@/utils/globalStorage';
 import { AppointmentFormatType } from '@/utils/types';
 import React, { useEffect, useState } from 'react';
@@ -13,7 +13,6 @@ export default function FinishAppointment() {
     const [formatAppointmentData, setFormatAppointmentData] = useState<AppointmentFormatType>()
 
     useEffect(() => {
-        setIsAppointmentScheduled(false);
         if(selectedEspeciality.length > 0 && selectedDate.length > 0 ) {
             setFormatAppointmentData(
                 {   
@@ -24,17 +23,20 @@ export default function FinishAppointment() {
                 }
             )
         }   
-    }, [selectedEspeciality, selectedDate, setIsAppointmentScheduled])
+    }, [selectedEspeciality, selectedDate])
 
-    const setAppointmentToDB = (dataToAddToDB: AppointmentFormatType, userUid: string) => {
-        addDataToDB({ route: `users/${userUid}/appointments`, data: [dataToAddToDB] });
+    const setAppointmentToDB = async () => {
+        if(!formatAppointmentData || !userAuth?.uid) return;
 
-        setIsAppointmentScheduled(true);
-        selectedDate.forEach((item) => { removeDate([item]) });
-        selectedEspeciality.forEach((item) => { removeEspeciality([item]) });
-        
+        const itWasAdded = await addDataToDB({ route: `users/${userAuth.uid}/appointments`, data: [formatAppointmentData] });
+
+        if(itWasAdded === "Saved data successfully") {
+            selectedDate.forEach((item) => { removeDate([item]) });
+            selectedEspeciality.forEach((item) => { removeEspeciality([item]) });
+            setIsAppointmentScheduled(true);  
+        }
     };
-    console.log("formatAppointmentData", formatAppointmentData)
+  
     
     return (
         <div className='w-full h-full flex flex-col gap-4'>
@@ -65,7 +67,7 @@ export default function FinishAppointment() {
                         Voltar
                     </Button>
                     <Button 
-                        onClick={() => (formatAppointmentData && userAuth?.uid) && setAppointmentToDB(formatAppointmentData, userAuth.uid)}
+                        onClick={() => setAppointmentToDB()}
                         className='bg-bluePrimary hover:bg-blueSecundary hover:shadow-xl font-semibold flex gap-2  active:scale-x-[.98]'
                         >
                         Confirmar Agendamento

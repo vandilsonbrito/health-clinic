@@ -4,12 +4,12 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import TestemonialCard from './TestemonialCard';
-import woman1 from '../../public/woman1.jpg';
-import woman2 from '../../public/woman2.jpg';
-import woman3 from '../../public/woman3.jpg';
-import woman4 from '../../public/woman4.jpg';
-import man1 from '../../public/man1.jpg';
-import man2 from '../../public/man2.jpg';
+import woman1 from '../../../public/woman1.jpg';
+import woman2 from '../../../public/woman2.jpg';
+import woman3 from '../../../public/woman3.jpg';
+import woman4 from '../../../public/woman4.jpg';
+import man1 from '../../../public/man1.jpg';
+import man2 from '../../../public/man2.jpg';
 
 
 export default function CarouselContainer() {

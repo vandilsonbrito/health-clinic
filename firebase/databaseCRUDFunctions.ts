@@ -9,12 +9,14 @@ export async function addDataToDB({ route, data }: { route: string, data: Profes
 
         if(data as AppointmentFormatType[]) {
             push(dbRef, data);
+            return "Saved data successfully"
         }
         else {
           await set(dbRef, data);
+          return "Saved data successfully"
         }
-        console.log('Data added successfully!');
-    } catch (error) {
+    } 
+    catch (error) {
         console.error('Error adding user: ', error);
     }
 };
@@ -26,11 +28,10 @@ export const useDataFromDB = ({ route }: { route: string }) => {
     const dbRef = ref(database);
     const snapshot = await get(child(dbRef, route));
     if(snapshot.exists()) {
-        console.log('Data got successfully');
         return snapshot.val();
     }
     else {
-      throw new Error('No data found!')
+      return null;
     }
   }
 
@@ -48,41 +49,38 @@ export const useGetAppointmentsDataFromDB = ({ route, userID }: { route: string,
     const dbRef = ref(database);
     const snapshot = await get(child(dbRef, route));
     if(snapshot.exists()) {
-        console.log('Data got successfully');
         return snapshot.val();
-    }
+      }
     else {
-      throw new Error('No data found!')
+      return null;
     }
   }
 
   const query = useQuery({
     queryFn: fetchDataFromDB,
-    queryKey: ['data'],
+    queryKey: ['user-appointments-data'],
     enabled: !!userID
   })
   return query;
 }
 
-
 export async function updateDBData({ route, data }: { route: string, data: ProfessionalData }) {
     const dbRef = ref(database, route);
     try {
         await update(dbRef, data);
-        console.log('Data updated successfully');
     }
     catch(error) {
         console.error('Error updating data: ', error);
     }
 }
 
-export async function deleteDBData(route: string) {
+export async function deleteDBData({route}: { route: string }) {
     const userRef = ref(database, route);
     try {
       await remove(userRef);
-      console.log('Data removed successfully');
+      return 'Data removed successfully'
     } 
     catch (error) {
       console.error('Error removing data: ', error);
     }
-  }
+}

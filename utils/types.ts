@@ -22,6 +22,10 @@ export interface AppointmentFormatType {
     date: string,
     time: string
 }
+export interface AppointmentDateTime {
+    date: string, 
+    time: string
+}
 
 export interface SectionsObjType {
     [key: number]: React.ReactElement
