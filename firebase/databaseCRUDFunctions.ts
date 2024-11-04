@@ -64,7 +64,6 @@ export const useGetAppointmentsDataFromDB = ({ route, userID }: { route: string,
   return query;
 }
 
-
 export async function updateDBData({ route, data }: { route: string, data: ProfessionalData }) {
     const dbRef = ref(database, route);
     try {
@@ -76,13 +75,14 @@ export async function updateDBData({ route, data }: { route: string, data: Profe
     }
 }
 
-export async function deleteDBData(route: string) {
+export async function deleteDBData({route}: { route: string }) {
     const userRef = ref(database, route);
     try {
       await remove(userRef);
       console.log('Data removed successfully');
+      return 'Data removed successfully'
     } 
     catch (error) {
       console.error('Error removing data: ', error);
     }
-  }
+}
