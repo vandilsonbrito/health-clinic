@@ -4,8 +4,6 @@ import ProfileForm from './ProfileForm';
 
 export default function UpdateProfile() {
 
-    
-
     return (
         <div className='w-full h-full'>
             <div className='w-full p-2 xl:p-5 mt-1 xl:mt-0 flex items-center justify-center gap-4 font-medium text-2xl bg-blue-100 text-blueSecundary'>
