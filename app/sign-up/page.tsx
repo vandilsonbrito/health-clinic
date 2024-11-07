@@ -8,6 +8,8 @@ import Link from "next/link";
 import SignUp from "../../firebase/auth/signUp";
 import Image from "next/image";
 import Logo from '../../public/logo-clinica-saude.png';
+import { database } from "../../firebase/firebaseDBConfig";
+import { ref, set } from "firebase/database";
 
 import {
   Form,
@@ -21,6 +23,7 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import SignInWithGoogle from "../../firebase/auth/signInWithGoogle";
 import { useRouter } from "next/navigation";
+import useGlobalStore from "@/utils/globalStorage";
 
  
 const formSchema = z.object({
@@ -35,6 +38,7 @@ const formSchema = z.object({
  
 export default function UserSignUp() {
     
+    const { setCameFromSignUp } = useGlobalStore();
     const [errorMessage, setErrorMessage] = useState('');
     const [loadUser, setLoadUser] = useState(false);
 
@@ -49,12 +53,11 @@ export default function UserSignUp() {
     });
      
 
-  
     async function onSubmit(values: z.infer<typeof formSchema>) {
     
         setLoadUser(true);
         setErrorMessage('');
-        const { result, error } = await SignUp(values.name, values.email, values.password);
+        const { result, error } = await SignUp(values.email, values.password);
 
         if(error) {
             if(error && typeof error === 'object' && 'code' in error && error.code === 'auth/email-already-in-use'){
@@ -65,8 +68,14 @@ export default function UserSignUp() {
         }
 
         if(result && result.user) {
+            const userRef = ref(database, 'users/' + result.user.uid + '/profile');
+            await set(userRef, {
+                name: values.name,
+                email: result.user.email
+            });
+
             setLoadUser(false);
-            //setUserSignedUp(true);
+            setCameFromSignUp(true);
             return router.push('/agendamento');
         }
 
@@ -77,7 +86,14 @@ export default function UserSignUp() {
 
         const { result, error } = await SignInWithGoogle();
         if (result) {
+            const userRef = ref(database, 'users/' + result.user.uid + '/profile');
+            await set(userRef, {
+                username: result.user.displayName,
+                email: result.user.email
+            });
+
             setLoadUser(false);
+            setCameFromSignUp(true);
             return router.push('/agendamento');
         } else {
             console.error('Error signing in with Google:', error);
@@ -88,11 +104,13 @@ export default function UserSignUp() {
  
     return (
         <main className="w-full h-full min-h-screen flex flex-col justify-center items-center bg-white">
-            <Image 
-            src={Logo} 
-            alt="Logo"
-            className='w-24 pb-5'
-            />
+            <Link href="/">
+                <Image
+                src={Logo}
+                alt="Logo"
+                className='w-24 pb-5'
+                />
+            </Link>
             <div className="w-[22rem] shadow-lg rounded-xl px-7 py-10 bg-white relative">
                 <Form {...form}>
 
