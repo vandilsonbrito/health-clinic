@@ -46,3 +46,13 @@ export interface ProfessionalData {
         }
     }
 }
+
+export interface UserProfileData {
+    name: string,
+    email: string,
+    cpf: string,
+    street: string,
+    neighborhood: string,
+    cityState: string,
+    cellphone: string
+}
