@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const token = await userCredential.user.getIdToken();
     
-            // Envie o token para seu backend para verificação
+            // Envia o token para o backend para verificação
             const response = await fetch('/api/auth', {
                 method: 'POST',
                 headers: {
