@@ -10,7 +10,9 @@ export type State = {
     isCancelAppointmentBtnClicked: boolean,
     respondedValueModalAppointmentCancel: boolean,
     showDeleteAppointmentMessage: boolean,
-    removeSelectedAppointment: string[]
+    removeSelectedAppointment: string[],
+    cameFromSignUp: boolean,
+    hasTheProfileBeenUpdated: boolean
 };
 
 export type Action = {
@@ -25,7 +27,9 @@ export type Action = {
     setIsCancelAppointmentBtnClicked: (isCancelAppointmentBtnClicked: State['isCancelAppointmentBtnClicked']) => void,
     setRespondedValueModalAppointmentCancel: (respondedValueModalAppointmentCancel: State['respondedValueModalAppointmentCancel']) => void,
     setShowDeleteAppointmentMessage: (showDeleteAppointmentMessage: State['showDeleteAppointmentMessage']) => void,
-    setRemoveSelectedAppointment: (removeSelectedAppointment: State['removeSelectedAppointment']) => void
+    setRemoveSelectedAppointment: (removeSelectedAppointment: State['removeSelectedAppointment']) => void,
+    setCameFromSignUp: (cameFromSignUp: State['cameFromSignUp']) => void,
+    setHasTheProfileBeenUpdated: (hasTheProfileBeenUpdated: State['hasTheProfileBeenUpdated']) => void
 };
 
 const useGlobalStore = create <State & Action>((set) => ({
@@ -67,6 +71,10 @@ const useGlobalStore = create <State & Action>((set) => ({
     removeSelectedAppointment: [],
     setRemoveSelectedAppointment: (value: string[]) => set({ removeSelectedAppointment: value }),
 
+    cameFromSignUp: false,
+    setCameFromSignUp: (value: boolean) => set({ cameFromSignUp: value }),
+    hasTheProfileBeenUpdated: false,
+    setHasTheProfileBeenUpdated: (value: boolean) => set({ hasTheProfileBeenUpdated: value })
 }));
 
 export default useGlobalStore;

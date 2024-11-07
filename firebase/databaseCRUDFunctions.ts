@@ -1,6 +1,6 @@
 import { child, get, ref, remove, set, update, push } from 'firebase/database';
 import { database } from './firebaseDBConfig';
-import { AppointmentFormatType, ProfessionalData } from '@/utils/types';
+import { AppointmentFormatType, ProfessionalData, UserProfileData } from '@/utils/types';
 import { useQuery } from '@tanstack/react-query';
 
 export async function addDataToDB({ route, data }: { route: string, data: ProfessionalData | AppointmentFormatType[]}) {
@@ -64,13 +64,15 @@ export const useGetAppointmentsDataFromDB = ({ route, userID }: { route: string,
   return query;
 }
 
-export async function updateDBData({ route, data }: { route: string, data: ProfessionalData }) {
+export async function updateDBData({ route, data }: { route: string, data: UserProfileData }) {
     const dbRef = ref(database, route);
     try {
         await update(dbRef, data);
+        return 'Successfully updated'
     }
     catch(error) {
-        console.error('Error updating data: ', error);
+      console.error('Error updating data: ', error);
+      return 'Error updating'
     }
 }
 

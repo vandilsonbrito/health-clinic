@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ProtectedRoute from '../components/ProtectedRoute';
 import Header from '../components/landingPage/Header';
 import { FaCalendarAlt, FaCalendarCheck, FaUserCircle   } from "react-icons/fa";
@@ -15,11 +15,15 @@ import useGlobalStore from '@/utils/globalStorage';
 export default function Agendamento() {
 
     //const { userAuth, authLoading, login, logout } = useAuth();
-    const { isAppointmentScheduled, setIsAppointmentScheduled } = useGlobalStore();
+    const { 
+        isAppointmentScheduled, setIsAppointmentScheduled, cameFromSignUp, hasTheProfileBeenUpdated 
+    } = useGlobalStore();
     const [section, setSecion] = useState<React.ReactElement | null>(null);
     const [selectedStep, setSelectedStep] = useState<number>(1);
 
-    const handleSection = (sectionNumber: number) => {
+    const handleSection = useCallback((sectionNumber: number) => {
+        if(!hasTheProfileBeenUpdated && selectedStep === 3) return;
+
         const sections: SectionsObjType = {
             1: <ScheduleAppointment/>,
             2: <ScheduledConsultation/>,
@@ -27,11 +31,18 @@ export default function Agendamento() {
         }
         setSelectedStep(sectionNumber);
         setSecion(sections[sectionNumber || 1]);
-    }
+    }, [hasTheProfileBeenUpdated, selectedStep])
 
     useEffect(() => {
+        if(cameFromSignUp) {
+            setSecion(<UpdateProfile/>);
+            setSelectedStep(3);
+            return
+        }
+
         setSecion(<ScheduleAppointment/>);
-    }, []);
+        setSelectedStep(1)
+    }, [cameFromSignUp]);
 
     useEffect(() => {
         if(isAppointmentScheduled) {
