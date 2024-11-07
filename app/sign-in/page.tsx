@@ -84,11 +84,13 @@ export default function Home() {
  
     return (
       <main className="w-full h-full min-h-screen flex flex-col justify-center items-center bg-white">
-          <Image 
-            src={Logo} 
-            alt="Logo"
-            className='w-24 pb-5'
-          />
+          <Link href="/">
+              <Image
+              src={Logo}
+              alt="Logo"
+              className='w-24 pb-5'
+              />
+            </Link>
           <div className="w-[22rem] shadow-lg rounded-xl px-7 py-10 relative">
               <Form {...form}>
 
