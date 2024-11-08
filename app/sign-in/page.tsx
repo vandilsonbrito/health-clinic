@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"
 import SignIn from "../../firebase/auth/signIn";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Logo from '../../public/logo-clinica-saude.png';
 import { FcGoogle } from "react-icons/fc";
@@ -36,6 +36,15 @@ export default function Home() {
     const [wasLoginButtonClicked, setWasLoginButtonClicked] = useState(false);
     const [loadUser, setLoadUser] = useState(false);
 
+    useEffect(() => {
+        if(errorMessage === 0) return;
+
+        const waitErrorMessage = setTimeout(() => {
+          setErrorMessage(0);
+        }, 3000);
+
+        return () => clearInterval(waitErrorMessage);
+    }, [errorMessage])
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -44,7 +53,6 @@ export default function Home() {
             password: ""
         },
     });
-
      
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoadUser(true);  
@@ -54,6 +62,7 @@ export default function Home() {
         setWasLoginButtonClicked(true);
         setErrorMessage(0);
         if(error) {
+            setLoadUser(false);
             if(error && typeof error === 'object' && 'code' in error && error.code === 'auth/invalid-credential') {
               setErrorMessage(1);
               setWasLoginButtonClicked(false);
