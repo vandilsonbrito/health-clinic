@@ -10,19 +10,26 @@ import ScheduledConsultation from '../components/ScheduledConsultation';
 import UpdateProfile from '../components/UpdateProfile';
 import { SectionsObjType } from '@/utils/types';
 import useGlobalStore from '@/utils/globalStorage';
-
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Agendamento() {
 
     //const { userAuth, authLoading, login, logout } = useAuth();
     const { 
-        isAppointmentScheduled, setIsAppointmentScheduled, cameFromSignUp, hasTheProfileBeenUpdated 
+        isAppointmentScheduled, setIsAppointmentScheduled, cameFromSignUp, isUserProfileDBFilled, isFirstLogin
     } = useGlobalStore();
     const [section, setSecion] = useState<React.ReactElement | null>(null);
     const [selectedStep, setSelectedStep] = useState<number>(1);
 
     const handleSection = useCallback((sectionNumber: number) => {
-        if(!hasTheProfileBeenUpdated && selectedStep === 3) return;
+        if(!isUserProfileDBFilled && selectedStep === 3){
+            toast('Preeencha todos os campos!', { style: {
+                borderRadius: '10px',
+                background: '#333',
+                color: '#fff',
+            }, });
+            return;
+        }
 
         const sections: SectionsObjType = {
             1: <ScheduleAppointment/>,
@@ -31,10 +38,10 @@ export default function Agendamento() {
         }
         setSelectedStep(sectionNumber);
         setSecion(sections[sectionNumber || 1]);
-    }, [hasTheProfileBeenUpdated, selectedStep])
+    }, [isUserProfileDBFilled, selectedStep])
 
     useEffect(() => {
-        if(cameFromSignUp) {
+        if(cameFromSignUp || isFirstLogin || !isUserProfileDBFilled) {
             setSecion(<UpdateProfile/>);
             setSelectedStep(3);
             return
@@ -42,7 +49,7 @@ export default function Agendamento() {
 
         setSecion(<ScheduleAppointment/>);
         setSelectedStep(1)
-    }, [cameFromSignUp]);
+    }, [cameFromSignUp, isFirstLogin, isUserProfileDBFilled]);
 
     useEffect(() => {
         if(isAppointmentScheduled) {
@@ -65,7 +72,10 @@ export default function Agendamento() {
             <div className="xl:hidden">
                 <ProtectedMobileHeader/>
             </div>
-            
+            <Toaster
+                position="top-center"
+                reverseOrder={false}
+            />
             <main className='w-full h-full min-h-[calc(100vh-4.5rem)] flex items-start bg-white '>
                 <section className="w-[20%] 2xl:w-[30%] h-full min-h-[calc(100vh-4.5rem)] bg-blueSecundary pb-5 text-white  hidden xl:block ">
                     <nav className="w-full h-full flex flex-col py-5">
