@@ -4,14 +4,13 @@ import "./globals.css";
 import "aos/dist/aos.css";
 import { AuthProvider } from "../firebase/authContext";
 import QueryClientProvider from "../utils/providers/ReactQueryProvider";
-import Head from "next/head";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Clinica + Saúde",
   description: "Clinica + Saúde",
-};
+}
 
 export const viewport = {
   width: 'device-width',
@@ -28,9 +27,6 @@ export default function RootLayout({
       <body
         className={`${montserrat.className} antialiased`}
       > 
-      <Head>
-        <meta charSet="utf-8" />
-      </Head>
       <QueryClientProvider>
           <AuthProvider>  
               {children}  
