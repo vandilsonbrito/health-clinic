@@ -12,7 +12,8 @@ export type State = {
     showDeleteAppointmentMessage: boolean,
     removeSelectedAppointment: string[],
     cameFromSignUp: boolean,
-    hasTheProfileBeenUpdated: boolean
+    isFirstLogin: boolean
+    isUserProfileDBFilled: boolean
 };
 
 export type Action = {
@@ -29,7 +30,8 @@ export type Action = {
     setShowDeleteAppointmentMessage: (showDeleteAppointmentMessage: State['showDeleteAppointmentMessage']) => void,
     setRemoveSelectedAppointment: (removeSelectedAppointment: State['removeSelectedAppointment']) => void,
     setCameFromSignUp: (cameFromSignUp: State['cameFromSignUp']) => void,
-    setHasTheProfileBeenUpdated: (hasTheProfileBeenUpdated: State['hasTheProfileBeenUpdated']) => void
+    setIsUserProfileDBFilled: (isUserProfileDBFilled: State['isUserProfileDBFilled']) => void,
+    setIsFirstLogin: (isFirstLogin: State['isFirstLogin']) => void
 };
 
 const useGlobalStore = create <State & Action>((set) => ({
@@ -73,8 +75,10 @@ const useGlobalStore = create <State & Action>((set) => ({
 
     cameFromSignUp: false,
     setCameFromSignUp: (value: boolean) => set({ cameFromSignUp: value }),
-    hasTheProfileBeenUpdated: false,
-    setHasTheProfileBeenUpdated: (value: boolean) => set({ hasTheProfileBeenUpdated: value })
+    isFirstLogin: false,
+    setIsFirstLogin: (value: boolean) => set({ isFirstLogin: value }),
+    isUserProfileDBFilled: false,
+    setIsUserProfileDBFilled: (value: boolean) => set({ isUserProfileDBFilled: value })
 }));
 
 export default useGlobalStore;
