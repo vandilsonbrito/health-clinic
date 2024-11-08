@@ -47,23 +47,28 @@ export default function Home() {
 
      
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        
-        const { error } = await SignIn(values.email, values.password);
+        setLoadUser(true);  
+
+        const { userCredential, error } = await SignIn(values.email, values.password);
 
         setWasLoginButtonClicked(true);
         setErrorMessage(0);
         if(error) {
-          if(error && typeof error === 'object' && 'code' in error && error.code === 'auth/invalid-credential') {
-            setErrorMessage(1);
-            setWasLoginButtonClicked(false);
-          }
-          else if(error && typeof error === 'object' && 'code' in error && error.code === 'auth/too-many-requests') {
-            setErrorMessage(2);
-            setWasLoginButtonClicked(false);
-          }
+            if(error && typeof error === 'object' && 'code' in error && error.code === 'auth/invalid-credential') {
+              setErrorMessage(1);
+              setWasLoginButtonClicked(false);
+            }
+            else if(error && typeof error === 'object' && 'code' in error && error.code === 'auth/too-many-requests') {
+              setErrorMessage(2);
+              setWasLoginButtonClicked(false);
+            }
+            else {
+              setErrorMessage(3);
+            }
         }
-        else {
-          setLoadUser(true);
+        else if(userCredential?.user.uid){
+          setLoadUser(false);
+          return router.push('/agendamento');
         }
     }
     
@@ -129,7 +134,10 @@ export default function Home() {
                         </FormItem>
                       )}
                     />
-                    { errorMessage === 1 && <p className="text-red-600">Email e/ou senha inválidos.</p> || errorMessage === 2 && <p className="text-red-600">Muitas tentativas, tente mais tarde.</p> }
+                    { errorMessage === 1 && <p className="text-red-600">Email e/ou senha inválidos.</p> 
+                    || errorMessage === 2 && <p className="text-red-600">Muitas tentativas, tente mais tarde.</p> 
+                    || errorMessage === 3 && <p className="text-red-600">Erro ao fazer login.</p> 
+                    }
                     <Button
                       className="w-full py-5"
                       type="submit"

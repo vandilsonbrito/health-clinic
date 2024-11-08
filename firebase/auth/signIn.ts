@@ -17,8 +17,9 @@ export default async function SignIn(email: string, password: string) {
                 Authorization: `Bearer ${token}`,
             },
         });
-        const data = await response.json();
-        console.log(data);
+        if (!response.ok) {
+            throw new Error(`Login failed with status: ${response.status}`);
+        }
     } 
     catch (e) {
         error = e;
