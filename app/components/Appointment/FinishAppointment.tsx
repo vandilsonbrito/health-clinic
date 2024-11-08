@@ -1,16 +1,20 @@
 import { Button } from '@/components/ui/button'
-import { addDataToDB } from '@/firebase/databaseCRUDFunctions';
+import { addDataToDB, useDataFromDB } from '@/firebase/databaseCRUDFunctions';
 import useGlobalStore from '@/utils/globalStorage';
 import { AppointmentFormatType } from '@/utils/types';
 import React, { useEffect, useState } from 'react';
 import { FaCheck } from "react-icons/fa";
 import { useAuth } from '@/firebase/authContext';
+import { areAllFieldsRequired } from '@/utils/functions/validation';
 
 export default function FinishAppointment() {
 
     const { userAuth } = useAuth();
-    const { selectedEspeciality, removeEspeciality, selectedDate, removeDate, setReturnToScheduleAppointmentFirstStep, setIsAppointmentScheduled } = useGlobalStore();
-    const [formatAppointmentData, setFormatAppointmentData] = useState<AppointmentFormatType>()
+    const { 
+        selectedEspeciality, removeEspeciality, selectedDate, removeDate, setReturnToScheduleAppointmentFirstStep, setIsAppointmentScheduled, setIsUserProfileDBFilled
+    } = useGlobalStore();
+    const [formatAppointmentData, setFormatAppointmentData] = useState<AppointmentFormatType>();
+    const { data: userProfileData } = useDataFromDB({route: 'users/' + userAuth?.uid + '/profile', queryKey: 'user-profile-data' });
 
     useEffect(() => {
         if(selectedEspeciality.length > 0 && selectedDate.length > 0 ) {
@@ -23,7 +27,19 @@ export default function FinishAppointment() {
                 }
             )
         }   
-    }, [selectedEspeciality, selectedDate])
+    }, [selectedEspeciality, selectedDate]);
+
+    useEffect(() => {
+        if(!userProfileData) return;
+        
+        setIsUserProfileDBFilled(false);
+        const requiredFields = ['name', 'email', 'cpf', 'street', 'neighborhood', 'cityState', 'cellphone'];
+        const allFieldsFilled = areAllFieldsRequired(userProfileData, requiredFields);
+        if(allFieldsFilled) {
+            setIsUserProfileDBFilled(true);
+            console.log("TODOS OS CAMPOS PREENCHIDOS")
+        }
+    }, [setIsUserProfileDBFilled, userProfileData])
 
     const setAppointmentToDB = async () => {
         if(!formatAppointmentData || !userAuth?.uid) return;
