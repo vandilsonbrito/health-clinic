@@ -11,7 +11,7 @@ import useGlobalStore from '@/utils/globalStorage';
 
 export default function AvailableSpecialities() {
 
-    const { data: specialistsData } = useDataFromDB({route: 'services/consultation'});
+    const { data: specialistsData } = useDataFromDB({route: 'services/consultation', queryKey: 'especiality-services-data' });
     const { setJumpToScheduleAppointmentNextStep } = useGlobalStore();
     const [especiality, setEspeciality] = useState<string[]>([]);
     const [professionalsName, setProfessionalsName] = useState<string[]>([]);

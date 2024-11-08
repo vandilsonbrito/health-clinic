@@ -9,7 +9,7 @@ export default function AvailableDate() {
     
     const formattedName: string = selectedEspeciality[0].toLowerCase().replaceAll(' ', '-');
     const formattedespeciality: string = selectedEspeciality[1].toLowerCase();
-    const { data: specialistsAgendaData } = useDataFromDB({route: `services/consultation/${formattedespeciality}/${formattedName}`});
+    const { data: specialistsAgendaData } = useDataFromDB({route: `services/consultation/${formattedespeciality}/${formattedName}`, queryKey: 'especiality-agenda-data' });
 
     useEffect(() => {
         setJumpToScheduleAppointmentNextStep(false);

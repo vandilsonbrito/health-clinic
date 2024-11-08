@@ -22,7 +22,7 @@ export async function addDataToDB({ route, data }: { route: string, data: Profes
 };
 
 
-export const useDataFromDB = ({ route }: { route: string }) => {
+export const useDataFromDB = ({ route, queryKey }: { route: string, queryKey: string }) => {
 
   const fetchDataFromDB = async () => {
     const dbRef = ref(database);
@@ -37,7 +37,7 @@ export const useDataFromDB = ({ route }: { route: string }) => {
 
   const query = useQuery({
     queryFn: fetchDataFromDB,
-    queryKey: ['data'],
+    queryKey: [queryKey],
 
   })
   return query;
