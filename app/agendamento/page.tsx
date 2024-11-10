@@ -11,17 +11,18 @@ import UpdateProfile from '../components/UpdateProfile';
 import { SectionsObjType } from '@/utils/types';
 import useGlobalStore from '@/utils/globalStorage';
 import toast, { Toaster } from 'react-hot-toast';
+import { useMedia } from 'use-media';
 
 export default function Agendamento() {
 
-    //const { userAuth, authLoading, login, logout } = useAuth();
+    const isMediumMobile = useMedia({maxWidth: '1024px'});
     const { 
-        isAppointmentScheduled, setIsAppointmentScheduled, cameFromSignUp, isUserProfileDBFilled, isFirstLogin
+        isAppointmentScheduled, setIsAppointmentScheduled, cameFromSignUp, isUserProfileDBFilled, isFirstLogin, sectionNumber
     } = useGlobalStore();
     const [section, setSecion] = useState<React.ReactElement | null>(null);
     const [selectedStep, setSelectedStep] = useState<number>(1);
 
-    const handleSection = useCallback((sectionNumber: number) => {
+    const handleSection = useCallback((sectionNumberLargeScreen: number) => {
         if(!isUserProfileDBFilled && selectedStep === 3){
             toast('Preeencha todos os campos!', { style: {
                 borderRadius: '10px',
@@ -36,9 +37,27 @@ export default function Agendamento() {
             2: <ScheduledConsultation/>,
             3: <UpdateProfile/>,
         }
-        setSelectedStep(sectionNumber);
-        setSecion(sections[sectionNumber || 1]);
-    }, [isUserProfileDBFilled, selectedStep])
+
+        if(isMediumMobile){
+            setSelectedStep(sectionNumber);
+            setSecion(sections[sectionNumber]);
+            console.log("PASSOU 1-IF")       
+        }
+        else {
+            console.log("PASSOU 2-IF")  
+            setSelectedStep(sectionNumberLargeScreen);
+            setSecion(sections[sectionNumberLargeScreen]);
+            console.log("sectionNumberLargeScreen", sectionNumberLargeScreen);
+        }
+        console.log("sectionNumberLargeScreen", sectionNumberLargeScreen);
+        console.log("sectionNumber", sectionNumber);
+    }, [isUserProfileDBFilled, selectedStep, sectionNumber]);
+
+    useEffect(() => {
+        if(isMediumMobile){
+            handleSection(sectionNumber);
+        }
+    }, [handleSection, sectionNumber, isMediumMobile])
 
     useEffect(() => {
         if(cameFromSignUp || isFirstLogin || !isUserProfileDBFilled) {
@@ -46,7 +65,6 @@ export default function Agendamento() {
             setSelectedStep(3);
             return
         }
-
         setSecion(<ScheduleAppointment/>);
         setSelectedStep(1)
     }, [cameFromSignUp, isFirstLogin, isUserProfileDBFilled]);

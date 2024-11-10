@@ -7,10 +7,12 @@ import { MenuIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useAuth } from '../../firebase/authContext';
+import useGlobalStore from '@/utils/globalStorage';
 
 export default function ProtectedMobileHeader() {
 
     const { logout } = useAuth();
+    const { setSectionNumber } = useGlobalStore();
 
     return (
       <header className='w-full h-[4.5rem] flex justify-between items-center font-medium px-5 md:px-14 bg-white shadow-lg sticky top-0 z-50 xl:hidden'>
@@ -25,22 +27,23 @@ export default function ProtectedMobileHeader() {
             <DropdownMenuContent align="center" className="w-[200px]">
 
                     <DropdownMenuItem>
-                        <Button className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
+                        <Button 
+                            onClick={() => setSectionNumber(1)}
+                            className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
                             Marcar Consulta
                         </Button>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                        <Button className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
+                        <Button 
+                            onClick={() => setSectionNumber(2)}
+                            className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
                             Consultas Agendadas
                         </Button>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                        <Button className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
-                            Cancelar Consulta
-                        </Button>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Button className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
+                        <Button 
+                            onClick={() => setSectionNumber(3)}
+                            className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
                             Atualizar Perfil
                         </Button>
                     </DropdownMenuItem>
