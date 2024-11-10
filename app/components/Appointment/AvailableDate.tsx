@@ -38,7 +38,7 @@ export default function AvailableDate() {
                                 onClick={() => handleDateClick(date, specialistsAgendaData.agenda.time[index])}>{date}
                             </button>
                         </td>
-                        <td>{specialistsAgendaData.agenda.time[index]}</td>
+                        <td>{`${specialistsAgendaData.agenda.time[index]} h`}</td>
                         <td className='uppercase'>{specialistsAgendaData.especiality}</td>
                     </tr>
                 )

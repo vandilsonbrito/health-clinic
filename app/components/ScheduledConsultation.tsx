@@ -28,7 +28,7 @@ export default function ScheduledConsultation() {
         if(!respondedValueModalAppointmentCancel) return;
 
         refetch();
-    }, [respondedValueModalAppointmentCancel])
+    }, [refetch, respondedValueModalAppointmentCancel])
     
     
     useEffect(() => {
@@ -66,7 +66,7 @@ export default function ScheduledConsultation() {
                                 <button
                                     className={(removeSelectedAppointment[0] === item?.date && removeSelectedAppointment[1] === item?.time) ? 'selected-container' : ''} 
                                     onClick={() => handleAppointmentClick(item?.date, item?.time)}>
-                                    {item?.date} - {item?.time}
+                                    {`${item?.date} - ${item?.time} h`}
                                 </button>
                             </td>
                             <td>{item?.especiality}</td>
@@ -110,8 +110,8 @@ export default function ScheduledConsultation() {
                     :
                         appointmentsFromDB.length > 0 ?
                             (
-                                <div className="w-full h-full max-h-[calc(100vh-333px)] overflow-y-auto">
-                                    <table className='w-full h-full'>
+                                <div className="w-full h-full max-h-[calc(100vh-333px)] overflow-y-auto overflow-x-hidden">
+                                    <table className='w-full h-full text-[.75rem] md:text-base'>
                                         <thead className='bg-[#e9f1f8da] font-semibold uppercase'>
                                             <tr>
                                                 <td className='text-center'>Data/Hora</td>
