@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 export type State = {
+    sectionNumber: number,
     selectedEspeciality: string[]
     selectedDate: string[],
     returnToScheduleAppointmentFirstStep: boolean
@@ -17,6 +18,7 @@ export type State = {
 };
 
 export type Action = {
+    setSectionNumber: (sectionNumber: State['sectionNumber']) => void,
     addEspeciality: (selectedEspeciality: State['selectedEspeciality']) => void,
     removeEspeciality: (selectedEspeciality: State['selectedEspeciality']) => void,
     addDate: (selectedDate: State['selectedDate']) => void,
@@ -35,6 +37,9 @@ export type Action = {
 };
 
 const useGlobalStore = create <State & Action>((set) => ({
+    sectionNumber: 1,
+    setSectionNumber: (value: number) => set ({ sectionNumber: value }),
+
     selectedEspeciality: [],
     addEspeciality: (selectedEspeciality) =>
         set((state) => ({                              
