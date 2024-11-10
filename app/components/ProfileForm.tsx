@@ -224,7 +224,7 @@ export default function ProfileForm() {
                     </div>
                     <div className="w-full flex justify-center items-center mt-5">
                         <Button
-                            className="btn w-1/3 py-5 font-semibold bg-blueSecundary hover:bg-bluePrimary "
+                            className="btn w-full md:w-1/3 py-5 font-semibold bg-blueSecundary hover:bg-bluePrimary "
                             type="submit"
                         >
                             { saveButtonSate === 'initial' && 'Salvar' }
