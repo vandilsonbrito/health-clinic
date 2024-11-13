@@ -27,8 +27,8 @@ import useGlobalStore from "@/utils/globalStorage";
 
  
 const formSchema = z.object({
-    name: z.string().min(3, {
-        message: "Min 3 characters",
+    name: z.string().min(6, {
+        message: "Min 6 characters",
       }).max(30),
     email: z.string().email({ message: "Email inválido"}),
     password: z.string().min(6, {
