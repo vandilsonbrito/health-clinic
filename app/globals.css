@@ -158,5 +158,25 @@ table button {
     transform: rotate(360deg);
   }
 }
+/* end */
 
+/* Carousel */
+.available-specialists {
+
+  .slick-prev:before, .slick-next:before {
+    display: none !important;
+  }
+
+  @media (min-width: '719px') {
+    .slick-prev:before, .slick-next:before {
+      color: black !important;
+    }
+    .slick-prev {
+      left: -22px !important;
+    }
+    .slick-next {
+      right: -15px !important;
+    }
+  }
+}
 /* end */
