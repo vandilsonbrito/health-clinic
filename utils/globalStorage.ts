@@ -37,7 +37,7 @@ export type Action = {
 };
 
 const useGlobalStore = create <State & Action>((set) => ({
-    sectionNumber: 1,
+    sectionNumber: 0,
     setSectionNumber: (value: number) => set ({ sectionNumber: value }),
 
     selectedEspeciality: [],
