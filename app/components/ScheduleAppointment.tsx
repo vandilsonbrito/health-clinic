@@ -9,12 +9,13 @@ import { SectionsObjType } from '../../utils/types';
 import useGlobalStore from '@/utils/globalStorage';
 import toast, { Toaster } from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
-
+import { useMedia } from 'use-media';
 
 export default function ScheduleAppointment() {
     
     const { selectedEspeciality, selectedDate, returnToScheduleAppointmentFirstStep, setReturnToScheduleAppointmentFirstStep, jumpToScheduleAppointmentNextStep } = useGlobalStore();
 
+    const isLargeScreen = useMedia({minWidth: '1024px'});
     const [section, setSecion] = useState<React.ReactElement | null>(null);
     const [selectedStep, setSelectedStep] = useState<number>(1);
 
@@ -41,7 +42,7 @@ export default function ScheduleAppointment() {
     }, []);
 
     useEffect(()=> {
-        if(jumpToScheduleAppointmentNextStep) {
+        if(isLargeScreen && jumpToScheduleAppointmentNextStep) {
             const delay = setTimeout(() => {
                 handleScheduleSection(selectedStep + 1);
             }, 500);
@@ -50,7 +51,7 @@ export default function ScheduleAppointment() {
             return () => clearTimeout(delay);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [jumpToScheduleAppointmentNextStep])
+    }, [isLargeScreen, jumpToScheduleAppointmentNextStep])
 
     useEffect(() => {
         if(returnToScheduleAppointmentFirstStep) {
@@ -116,10 +117,10 @@ export default function ScheduleAppointment() {
                     </div>
 
 
-                    <div className={`xl:hidden w-full h-full flex justify-between items-center p-2 mt-4 sm:px-5  ${selectedStep === 3 && 'hidden'}`}>
+                    <div className={`xl:hidden w-full h-full flex ${selectedStep === 1 ? 'justify-end' : 'justify-between'} items-center p-2 mt-4 sm:px-5  ${selectedStep === 3 && 'hidden'}`}>
                         <Button 
                             onClick={() => handleScheduleSection(selectedStep - 1)}
-                            className="bg-transparent text-blueSecundary hover:bg-bluePrimary hover:text-white font-semibold border"
+                            className={`bg-transparent text-blueSecundary hover:bg-bluePrimary hover:text-white font-semibold border  ${selectedStep === 1 && 'hidden'}`}
                             >Voltar</Button>
                         <Button 
                             onClick={() => handleScheduleSection(selectedStep + 1)}
