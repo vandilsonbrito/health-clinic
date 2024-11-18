@@ -2,6 +2,8 @@
 import React, { useEffect } from 'react';
 import { useDataFromDB } from '@/firebase/databaseCRUDFunctions';
 import useGlobalStore from '../../../utils/globalStorage';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+  
 
 export default function AvailableDate() {
 
@@ -15,47 +17,30 @@ export default function AvailableDate() {
         setJumpToScheduleAppointmentNextStep(false);
     }, [setJumpToScheduleAppointmentNextStep]);
 
-    const handleDateClick = (date: string, time: string) => {
+    const handleDateClick = (value: string) => {
+        const [date, time] = value.split('-');
+
         if(selectedDate.length > 0){
             selectedDate.forEach((item) => {
-                removeDate([item])
-            })
-        }
+                removeDate([item]);
+            });
+        };
         addDate([date, time]);
         setJumpToScheduleAppointmentNextStep(true);
     }
 
     const displayAgenda = () => {
-        let arrAux: React.JSX.Element[] = [];
-        const arrAux2: React.JSX.Element[] = [];
-        if (specialistsAgendaData) {
+        const arrOptionDates: React.JSX.Element[] = [];
+        if(specialistsAgendaData) {
             specialistsAgendaData?.agenda?.date?.map((date: string, index: number) => {
-                arrAux.push(
-                    <tr key={index}>
-                        <td>
-                            <button
-                                className={`${selectedDate[0] === date ? 'selected-container' : ''}`} 
-                                onClick={() => handleDateClick(date, specialistsAgendaData.agenda.time[index])}>{date}
-                            </button>
-                        </td>
-                        <td>{`${specialistsAgendaData.agenda.time[index]} h`}</td>
-                        <td className='uppercase'>{specialistsAgendaData.especiality}</td>
-                    </tr>
+                arrOptionDates.push(
+                    <SelectItem key={index} value={`${date}-${specialistsAgendaData.agenda.time[index]}`}>
+                        {date} - {specialistsAgendaData.agenda.time[index]} h
+                    </SelectItem>
                 )
-                if(arrAux.length > 3) {
-                    arrAux2.push(
-                        <table className='w-1/2' key={index}>
-                            <tbody>
-                                {arrAux}
-                            </tbody>
-                        </table>
-                    );
-                    arrAux = [];
-                }
             })
         }
-        console.log("ArrAux2", arrAux2);
-        return arrAux2;
+        return arrOptionDates;
     };
 
 
@@ -63,13 +48,26 @@ export default function AvailableDate() {
         <div className='w-full h-full flex flex-col gap-4  availableDate'>
             <div>
                 <h2 className='font-medium mt-1'>Datas Disponíveis</h2>
-                <p className='text-[.7rem]'>* Selecione uma data</p>
+                {/* <p className='text-[.7rem]'>* Selecione uma data</p> */}
             </div>
             {
                 specialistsAgendaData ?
                 (
                     <div className="flex flex-col items-center lg:flex-row gap-1">
-                        {displayAgenda()}
+                        <form className='w-full h-full flex flex-col items-start gap-8'>
+                            <Select 
+                                onValueChange={(value) => handleDateClick(value)} 
+                                value={selectedDate.length > 0 ? `${selectedDate[0]}-${selectedDate[1]}` : ''}
+                                >
+                                <SelectTrigger className="w-full md:w-1/2">
+                                    <SelectValue className='text-[.7rem]' placeholder="* Selecione uma data" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {displayAgenda()}
+                                </SelectContent>
+                            </Select>
+                        </form>
+
                     </div>
                 )
                 :
