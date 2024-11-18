@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../firebase/authContext';
 import { useEffect } from 'react';
+import { useDataFromDB } from '@/firebase/databaseCRUDFunctions';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const { userAuth, authLoading } = useAuth();
@@ -13,9 +14,15 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         }
     }, [userAuth, authLoading, router]);
 
-    if(authLoading) return <div className="w-full min-h-screen flex flex-col justify-center items-center"><p>Loading...</p></div>
+    const { data: userProfileDataFromDB } = useDataFromDB({ 
+        route: 'users/' + userAuth?.uid + '/profile', 
+        queryKey: 'user-profile-data' 
+    });
 
-    return userAuth ? <>{children}</> : null;
+
+    if(authLoading || !userProfileDataFromDB) return <div className="w-full min-h-screen flex flex-col justify-center items-center"><p className="text-lg">Carregando...</p></div>
+
+    return (userAuth && userProfileDataFromDB) ? <>{children}</> : null;
 };
 
 export default ProtectedRoute;

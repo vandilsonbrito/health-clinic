@@ -85,7 +85,7 @@ export default function UserSignUp() {
         setLoadUser(true);
 
         const { result, error } = await SignInWithGoogle();
-        if (result) {
+        if (result && result.user) {
             const userRef = ref(database, 'users/' + result.user.uid + '/profile');
             await set(userRef, {
                 username: result.user.displayName,

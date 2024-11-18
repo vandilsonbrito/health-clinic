@@ -160,15 +160,16 @@ table button {
 }
 /* end */
 
+
 /* Carousel */
 .available-specialists {
-
   .slick-prev:before, .slick-next:before {
     display: none !important;
   }
 
-  @media (min-width: '719px') {
+  @media (min-width: 719px) {
     .slick-prev:before, .slick-next:before {
+      display: block !important;
       color: black !important;
     }
     .slick-prev {
@@ -179,4 +180,5 @@ table button {
     }
   }
 }
+
 /* end */

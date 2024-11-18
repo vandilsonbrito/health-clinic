@@ -14,9 +14,22 @@ export default function ProtectedMobileHeader() {
     const { logout } = useAuth();
     const { setSectionNumber } = useGlobalStore();
 
+    const handleMenuClick = (sectionNum: number) => {
+        setSectionNumber(sectionNum);
+        //console.log("Clicou Seção",  sectionNum);
+    }
+
     return (
-      <header className='w-full h-[4.5rem] flex justify-between items-center font-medium px-5 md:px-14 bg-white shadow-lg sticky top-0 z-50 xl:hidden'>
-          <Image src={Logo} alt="Logo" className='w-[5.5rem]' width={200} height={200}/>
+      <header className='w-full h-[4.5rem] flex justify-between items-center font-medium px-5 md:px-14 bg-white shadow-lg sticky top-0 z-50'>
+          <Link href="/">
+              <Image 
+                src={Logo} 
+                alt="Logo" 
+                className='w-[5.5rem]' 
+                width={200} 
+                height={200}
+                />
+            </Link>
 
           <DropdownMenu>
             <DropdownMenuTrigger>
@@ -28,21 +41,21 @@ export default function ProtectedMobileHeader() {
 
                     <DropdownMenuItem>
                         <Button 
-                            onClick={() => setSectionNumber(1)}
+                            onClick={() => handleMenuClick(1)}
                             className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
                             Marcar Consulta
                         </Button>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                         <Button 
-                            onClick={() => setSectionNumber(2)}
+                            onClick={() => handleMenuClick(2)}
                             className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
                             Consultas Agendadas
                         </Button>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                         <Button 
-                            onClick={() => setSectionNumber(3)}
+                            onClick={() => handleMenuClick(3)}
                             className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
                             Atualizar Perfil
                         </Button>

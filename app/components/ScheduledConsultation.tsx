@@ -15,7 +15,9 @@ export default function ScheduledConsultation() {
     const [appointmentsNode, setAppointmentsNode] = useState<ReactElement[]>();
     const [appointmentIds, setAppointmentIds] = useState<string[]>([]);
     const [removeSelectedAppointmentID, setRemoveSelectedAppointmentID] = useState<string>('');
-    const { showDeleteAppointmentMessage, respondedValueModalAppointmentCancel, removeSelectedAppointment, setRemoveSelectedAppointment } = useGlobalStore();
+    const { 
+        showDeleteAppointmentMessage, respondedValueModalAppointmentCancel, removeSelectedAppointment, setRemoveSelectedAppointment, setIsAppointmentScheduled
+     } = useGlobalStore();
 
     useEffect(() => {
         if(userAuth && userAuth.uid) {
@@ -40,11 +42,11 @@ export default function ScheduledConsultation() {
         }
         setAppointmentIds(arrAux);
         setAppointmentsFromDB(arrAux2);
-        console.log("userAppointmentData", userAppointmentData)
+        //console.log("userAppointmentData", userAppointmentData)
     }, [userAppointmentData]);
-/* CONSOLE.LOG */
+
     useEffect(() => {
-        console.log("appointmentsFromDB", appointmentsFromDB)
+        //console.log("appointmentsFromDB", appointmentsFromDB)
     }, [appointmentsFromDB])
     
     const handleAppointmentClick = (date: string, time: string) => {
@@ -52,7 +54,12 @@ export default function ScheduledConsultation() {
             setRemoveSelectedAppointment([]);
         }
         setRemoveSelectedAppointment([date, time]);
-    }
+    };
+    
+    /* Retornando isAppointmentScheduled para false após ser direcionado para essa seção */
+    useEffect(() => {
+        setIsAppointmentScheduled(false);
+    }, []);
 
     useEffect(() => {
         if(appointmentsFromDB.length > 0) {
