@@ -24,8 +24,6 @@ export default function AvailableSpecialities() {
         function fetchData() {
             if(specialistsData) {
                 const auxArr: string[] = [], auxArr2: string[] = [];
-            
-                console.log("Data", specialistsData)
 
                 for(const especiality in specialistsData) {
                     for(const professional in specialistsData[especiality]) {
@@ -50,12 +48,12 @@ export default function AvailableSpecialities() {
         slidesToScroll: isSuperMobile ? 2 : isMobile ? 3 : isMediumMobile ? 4 : 6,
         autoplay: false,
         speed: 300,
-        autoplaySpeed: 5000,
-        cssEase: "linear"
+        cssEase: "linear",
+    
     };
     
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2  available-specialists">
             <div>
                 <h2 className='font-medium'>Especialidades Disponíveis</h2>
                 <p className='text-[.7rem]'>* Selecione uma especialidade</p>
