@@ -70,7 +70,6 @@ export default function ProfileForm() {
             setTimeout(() => {
                 setIsUserProfileDBFilled(true);
             }, 500)
-            //console.log("TODOS OS CAMPOS PREENCHIDOS")
         }
         else {
             setSaveButtonState('error');
@@ -92,13 +91,15 @@ export default function ProfileForm() {
 
     useEffect(() => {
         if(userProfileData && !isUserProfileDBFilled){
-            //console.log("FOI DAQUI A TOAST")
-            toast('Preeencha todos os campos!', { style: {
-                borderRadius: '10px',
-                background: '#333',
-                color: '#fff',
-            }, });
-            return;
+            const waitIsUserProfileDBFilled = setTimeout(() => {
+                toast('Preeencha todos os campos!', { style: {
+                    borderRadius: '10px',
+                    background: '#333',
+                    color: '#fff',
+                }, });
+            }, 1000);
+    
+            return () => clearTimeout(waitIsUserProfileDBFilled); 
         }
     }, [userProfileData, isUserProfileDBFilled]);
 

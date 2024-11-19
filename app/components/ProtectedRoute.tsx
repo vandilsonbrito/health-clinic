@@ -19,7 +19,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         queryKey: 'user-profile-data' 
     });
 
-
     if(authLoading || !userProfileDataFromDB) return <div className="w-full min-h-screen flex flex-col justify-center items-center"><p className="text-lg">Carregando...</p></div>
 
     return (userAuth && userProfileDataFromDB) ? <>{children}</> : null;
