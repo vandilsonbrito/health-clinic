@@ -10,7 +10,7 @@ import UpdateProfile from '../components/UpdateProfile';
 import { SectionsObjType } from '@/utils/types';
 import useGlobalStore from '@/utils/globalStorage';
 import { useMedia } from 'use-media';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { useDataFromDB } from '@/firebase/databaseCRUDFunctions';
 import { useAuth } from '@/firebase/authContext';
 import { areAllFieldsRequired } from '@/utils/functions/profileFormValidation';
@@ -36,7 +36,6 @@ export default function Agendamento() {
             2: <ScheduledConsultation/>,
             3: <UpdateProfile/>,
         }
-
         
         if(userProfileData && !isUserProfileDBFilled) {
             setSelectedStep(3);
@@ -49,11 +48,10 @@ export default function Agendamento() {
             return;
         }
 
-        
         if(isMediumMobile){
             setSelectedStep(sectionNumber);
             setSecion(sections[sectionNumber]);
-                
+            //console.log('É mobile, dentro de handleSection e setou a section', sectionNumber);
         }
         else {
             setSelectedStep(sectionNumberLargeScreen);
@@ -83,10 +81,12 @@ export default function Agendamento() {
             if(isAppointmentScheduled) {
                 setSelectedStep(2);
                 setSecion(<ScheduledConsultation />);
+                toast.success('Consulta agendada!')
                 return;
             }
             // evita primeiro rendering
             else if(sectionNumber !== 0) {
+                //console.log('SectionNumber diferente de 0')
                 handleSection(sectionNumber);
             }
         }
@@ -105,11 +105,13 @@ export default function Agendamento() {
     /* Quando o appointment estiver marcado levar pra ScheduledAppointment*/
     useEffect(() => {
         if(isAppointmentScheduled && isMediumMobile) {
+            toast.success('Consulta agendada!')
             setSelectedStep(2);
             setSecion(<ScheduledConsultation />);
         }
         if(isAppointmentScheduled && !isMediumMobile) {
             const waitInterval = setTimeout(() => { 
+                toast.success('Consulta agendada!')
                 setSelectedStep(2);
                 setSecion(<ScheduledConsultation />);
             }, 500);
@@ -117,11 +119,15 @@ export default function Agendamento() {
             return () => clearTimeout(waitInterval); 
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isAppointmentScheduled, isMediumMobile, isAppointmentScheduled]);
+    }, [isAppointmentScheduled, isMediumMobile]);
 
     return (
         <ProtectedRoute>
             <main>
+                <Toaster
+                    position="top-center"
+                    reverseOrder={false}
+                />
                 <div className="hidden xl:block">
                     <Header/>
                 </div>
