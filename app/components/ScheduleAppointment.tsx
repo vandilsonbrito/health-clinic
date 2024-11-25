@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react'
 import { FaCalendarAlt, FaCheckCircle  } from 'react-icons/fa';
-import { FaUserDoctor, FaRegClock  } from "react-icons/fa6";
+import { FaUserDoctor  } from "react-icons/fa6";
 import AvailableSpecialities from './Appointment/AvailableSpecialities';
 import AvailableDate from './Appointment/AvailableDate';
 import FinishAppointment from './Appointment/FinishAppointment';
@@ -11,9 +11,21 @@ import toast, { Toaster } from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { useMedia } from 'use-media';
 
+
+function ChooseProfessionalAndDate() {
+    return (
+        <div className="w-full h-full flex flex-col gap-10">
+            <AvailableSpecialities />
+            <AvailableDate />
+        </div>
+    )
+}
+
 export default function ScheduleAppointment() {
     
-    const { selectedEspeciality, selectedDate, returnToScheduleAppointmentFirstStep, setReturnToScheduleAppointmentFirstStep, jumpToScheduleAppointmentNextStep } = useGlobalStore();
+    const { 
+        selectedEspeciality, selectedDate, returnToScheduleAppointmentFirstStep, setReturnToScheduleAppointmentFirstStep, jumpToScheduleAppointmentNextStep, isReadyToChooseDate, setIsReadyToChooseDate
+    } = useGlobalStore();
 
     const isLargeScreen = useMedia({minWidth: '1024px'});
     const [section, setSecion] = useState<React.ReactElement | null>(null);
@@ -21,25 +33,32 @@ export default function ScheduleAppointment() {
 
     const handleScheduleSection = (sectionNumber: number) => {
         const sections: SectionsObjType = {
-            1: <AvailableSpecialities />,
-            2: <AvailableDate />,
-            3: <FinishAppointment />
+            1: <ChooseProfessionalAndDate/>,
+            2: <FinishAppointment />,
         }
-        if((sectionNumber === 2 && !selectedEspeciality[0]) || (sectionNumber === 3 && !selectedDate[0])){
-            toast('Escolha uma opção!', { style: {
+        if((sectionNumber === 2 && (!selectedEspeciality[0] || !selectedDate[0])) ){
+            toast('Escolha um profissional e uma data!', { style: {
                 borderRadius: '10px',
                 background: '#333',
                 color: '#fff',
             }, });
             return;
         }
+
         setSelectedStep(sectionNumber);
         setSecion(sections[sectionNumber || 1]);
     }
 
     useEffect(() => {
-        setSecion(<AvailableSpecialities />);
-    }, []);
+        setSecion(<ChooseProfessionalAndDate />);
+    }, [isReadyToChooseDate]);
+
+    useEffect(() => {
+        setIsReadyToChooseDate(false);
+        if(selectedEspeciality.length > 0){
+            setIsReadyToChooseDate(true);
+        }
+    }, [selectedEspeciality, setIsReadyToChooseDate]);
 
     useEffect(()=> {
         if(isLargeScreen && jumpToScheduleAppointmentNextStep) {
@@ -47,7 +66,6 @@ export default function ScheduleAppointment() {
                 handleScheduleSection(selectedStep + 1);
             }, 500);
             
-
             return () => clearTimeout(delay);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,7 +73,7 @@ export default function ScheduleAppointment() {
 
     useEffect(() => {
         if(returnToScheduleAppointmentFirstStep) {
-            setSecion(<AvailableSpecialities />);
+            setSecion(<ChooseProfessionalAndDate />);
             setSelectedStep(1);
         } 
         setReturnToScheduleAppointmentFirstStep(false);
@@ -83,7 +101,7 @@ export default function ScheduleAppointment() {
                                     className={`w-[19rem] h-[7rem] flex items-center justify-around rounded-md border p-4 hover:bg-bluePrimary hover:text-white transform ease-in-out duration-200 ${selectedStep === 1 ? 'selected-container ' : ''}`}>
                                     <FaUserDoctor className='text-3xl'/>
                                     <div className="flex flex-col justify-end">
-                                        <p className='font-medium text-end'>Especialidade</p>
+                                        <p className='font-medium text-end'>Especialidade - Data/Horário</p>
                                         <p>Escolha a Especialidade</p>
                                     </div>
                                 </button>
@@ -92,17 +110,6 @@ export default function ScheduleAppointment() {
                                 <button
                                     onClick={() => handleScheduleSection(2)}
                                     className={`w-[19rem] h-[7rem] flex items-center justify-around rounded-md border p-4 hover:bg-bluePrimary hover:text-white transform ease-in-out duration-200 ${selectedStep === 2 ? 'selected-container ' : ''}`}>
-                                    <FaRegClock  className='text-3xl'/>
-                                    <div className="flex flex-col justify-end">
-                                        <p className='font-medium text-end'>Data/Horário</p>
-                                        <p>Escolha a Data</p>
-                                    </div>
-                                </button>
-                            </li>
-                            <li>
-                                <button
-                                    onClick={() => handleScheduleSection(3)}
-                                    className={`w-[19rem] h-[7rem] flex items-center justify-around rounded-md border p-4 hover:bg-bluePrimary hover:text-white transform ease-in-out duration-200 ${selectedStep === 3 ? 'selected-container ' : ''}`}>
                                     <FaCheckCircle  className='text-3xl'/>
                                     <div className="flex flex-col justify-end">
                                         <p className='font-medium text-end'>Concluir</p>
@@ -117,7 +124,7 @@ export default function ScheduleAppointment() {
                     </div>
 
 
-                    <div className={`xl:hidden w-full h-full flex ${selectedStep === 1 ? 'justify-end' : 'justify-between'} items-center p-2 mt-4 sm:px-5  ${selectedStep === 3 && 'hidden'}`}>
+                    <div className={`xl:hidden w-full h-full flex ${selectedStep === 1 ? 'justify-end' : 'justify-between'} items-center p-2 mt-4 sm:px-5  ${selectedStep === 2 && 'hidden'}`}>
                         <Button 
                             onClick={() => handleScheduleSection(selectedStep - 1)}
                             className={`bg-transparent text-blueSecundary hover:bg-bluePrimary hover:text-white font-semibold border  ${selectedStep === 1 && 'hidden'}`}
