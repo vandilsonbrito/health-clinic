@@ -7,11 +7,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 export default function AvailableDate() {
 
-    const { addDate, removeDate, selectedEspeciality, selectedDate, setJumpToScheduleAppointmentNextStep } = useGlobalStore();
+    const { 
+        addDate, removeDate, selectedEspeciality, selectedDate, setJumpToScheduleAppointmentNextStep, isReadyToChooseDate
+    } = useGlobalStore();
     
-    const formattedName: string = selectedEspeciality[0].toLowerCase().replaceAll(' ', '-');
-    const formattedespeciality: string = selectedEspeciality[1].toLowerCase();
-    const { data: specialistsAgendaData } = useDataFromDB({route: `services/consultation/${formattedespeciality}/${formattedName}`, queryKey: 'especiality-agenda-data' });
+    const formattedName: string = selectedEspeciality[0]?.toLowerCase().replaceAll(' ', '-');
+    const formattedespeciality: string = selectedEspeciality[1]?.toLowerCase();
+    const { data: specialistsAgendaData, refetch } = useDataFromDB({route: `services/consultation/${formattedespeciality}/${formattedName}`, queryKey: 'especiality-agenda-data' });
 
     useEffect(() => {
         setJumpToScheduleAppointmentNextStep(false);
@@ -43,41 +45,38 @@ export default function AvailableDate() {
         return arrOptionDates;
     };
 
+    useEffect(() => {
+        if(isReadyToChooseDate) {
+            refetch()
+        }
+    }, [specialistsAgendaData, isReadyToChooseDate])
 
     return (
-        <div className='w-full h-full flex flex-col gap-4  availableDate'>
+        <div className='w-full h-full flex flex-col gap-4 sm:px-3 availableDate'>
             <div>
                 <h2 className='font-medium mt-1'>Datas Disponíveis</h2>
                 {/* <p className='text-[.7rem]'>* Selecione uma data</p> */}
             </div>
-            {
-                specialistsAgendaData ?
-                (
-                    <div className="flex flex-col items-center lg:flex-row gap-1">
-                        <form className='w-full h-full flex flex-col items-start gap-8'>
-                            <Select 
-                                onValueChange={(value) => handleDateClick(value)} 
-                                value={selectedDate.length > 0 ? `${selectedDate[0]}-${selectedDate[1]}` : ''}
-                                >
-                                <SelectTrigger className="w-full md:w-1/2">
-                                    <SelectValue className='text-[.7rem]' placeholder="* Selecione uma data" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {displayAgenda()}
-                                </SelectContent>
-                            </Select>
-                        </form>
+    
+            <div className="flex flex-col items-center lg:flex-row gap-1">
+                <form className='w-full h-full flex flex-col items-start gap-8'>
+                    <Select 
+                        onValueChange={(value) => handleDateClick(value)} 
+                        value={selectedDate.length > 0 ? `${selectedDate[0]}-${selectedDate[1]}` 
+                        : ''}
+                        disabled={!isReadyToChooseDate || !specialistsAgendaData}
+                        >
+                        <SelectTrigger className="w-full md:w-1/2">
+                            <SelectValue className='text-[.7rem]' placeholder="* Selecione uma data" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {displayAgenda()}
+                        </SelectContent>
+                    </Select>
+                </form>
 
-                    </div>
-                )
-                :
-                (   
-                    <div className="w-full h-full min-h-[10rem] flex flex-col justify-center items-center">
-                        <p className='text-lg mb-4'>Loading</p>
-                        <span className="loader"></span>
-                    </div>
-                )
-            }
+            </div>
+                
         </div>
     )
 }
