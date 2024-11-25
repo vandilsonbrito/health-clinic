@@ -35,7 +35,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 },
             });
             const data = await response.json();
-            console.log(data);
+            //console.log("Data", data)
+            return data;
         } catch (error) {
             console.error('Login error', error);
         }
