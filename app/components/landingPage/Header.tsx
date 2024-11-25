@@ -2,7 +2,6 @@
 //import { Button } from '@/components/ui/button';
 import { Link as ScrollLink } from 'react-scroll';
 import Link  from 'next/link';
-import React, { useEffect } from 'react';
 import Logo from '../../../public/logo-clinica-saude.png';
 import Image from 'next/image';
 import BtnLogIn from './BtnLogIn';
@@ -11,13 +10,7 @@ import { Button } from '@/components/ui/button';
 
 export default function Header() {
 
-    /* const router = useRouter(); */
-    const { userAuth, login, logout } = useAuth();
-
-    useEffect(() => {
-      console.log('UserAuth', userAuth);
-    }, [userAuth, login, logout]);
-
+    const { userAuth, logout } = useAuth();
 
     return (
       <header className='w-full h-[4.5rem] flex justify-center items-center font-medium px-5 md:px-14 bg-white shadow-lg sticky top-0 z-50' >
