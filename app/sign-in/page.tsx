@@ -148,16 +148,16 @@ export default function Home() {
                     || errorMessage === 3 && <p className="text-red-600">Erro ao fazer login.</p> 
                     }
                     <Button
-                      className="w-full py-5"
+                      className="w-full py-5 bg-blueSecundary hover:bg-bluePrimary"
                       type="submit"
-                      >Sign in</Button>
+                      >Entrar</Button>
                   </form>
                   <Button className="w-full flex gap-2 mt-4" variant="secondary" onClick={handleLogInGoogle}>
                       Google
                       <FcGoogle className="text-lg"/>
                   </Button>
                   <h2 className="text-sm pt-4 text-center">Não tem uma conta?
-                    <Link href='/sign-up' className='font-semibold ml-1 underline'>Sign up</Link>
+                    <Link href='/sign-up' className='font-semibold ml-1 underline'>Cadastre-se</Link>
                   </h2>
               </Form>
           </div>

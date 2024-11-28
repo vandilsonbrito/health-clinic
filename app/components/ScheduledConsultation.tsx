@@ -45,9 +45,6 @@ export default function ScheduledConsultation() {
         //console.log("userAppointmentData", userAppointmentData)
     }, [userAppointmentData]);
 
-    useEffect(() => {
-        //console.log("appointmentsFromDB", appointmentsFromDB)
-    }, [appointmentsFromDB])
     
     const handleAppointmentClick = (date: string, time: string) => {
         if(removeSelectedAppointment.length > 0){
@@ -59,6 +56,7 @@ export default function ScheduledConsultation() {
     /* Retornando isAppointmentScheduled para false após ser direcionado para essa seção */
     useEffect(() => {
         setIsAppointmentScheduled(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -67,11 +65,10 @@ export default function ScheduledConsultation() {
             const displayAppointments = () => {
                 appointmentsFromDB.map((item: AppointmentFormatType, index: number) => {
                     auxArr.push(
-                        <tr key={index} className="w-full uppercase">
+                        <tr key={index} className={`w-full uppercase ${(removeSelectedAppointment[0] === item?.date && removeSelectedAppointment[1] === item?.time) ? 'selected-container' : ''}`}>
                             
                             <td>
-                                <button
-                                    className={(removeSelectedAppointment[0] === item?.date && removeSelectedAppointment[1] === item?.time) ? 'selected-container' : ''} 
+                                <button 
                                     onClick={() => handleAppointmentClick(item?.date, item?.time)}>
                                     {`${item?.date} - ${item?.time} h`}
                                 </button>
@@ -85,6 +82,7 @@ export default function ScheduledConsultation() {
             }
             displayAppointments();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [appointmentsFromDB, removeSelectedAppointment]);
 
     useEffect(() => {
@@ -104,7 +102,7 @@ export default function ScheduledConsultation() {
 
             <div className="w-full h-full border flex flex-col gap-4  mt-5 p-2">
                 <h2 className='font-medium'>Próxima(s) Consultas</h2>
-                { showDeleteAppointmentMessage && <p className='text-[.7rem]'>*Selecione Data/Horário para cancelar</p> }
+                { showDeleteAppointmentMessage && <p className='text-[.7rem] font-medium bg-blueSecundary p-1 text-white'>*Selecione Data/Horário para cancelar</p> }
                
                 {   
                     isLoading ? 
@@ -117,7 +115,7 @@ export default function ScheduledConsultation() {
                     :
                         appointmentsFromDB.length > 0 ?
                             (
-                                <div className="w-full h-full max-h-[calc(100vh-333px)] overflow-y-auto overflow-x-hidden">
+                                <div className="w-full h-full max-h-[calc(100vh-333px)] overflow-auto ">
                                     <table className='w-full h-full text-[.75rem] md:text-base'>
                                         <thead className='bg-[#e9f1f8da] font-semibold uppercase'>
                                             <tr>

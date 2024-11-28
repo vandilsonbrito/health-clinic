@@ -64,8 +64,8 @@ export default function ProtectedMobileHeader() {
                 <DropdownMenuSeparator/>
 
                 <DropdownMenuItem>
-                    <Button asChild className='bg-bluePrimary  active:scale-x-[.98]'>
-                        <Link href="" className="w-full" onClick={() => logout()}>Log out</Link>
+                    <Button asChild className='px-7 max-w-28 bg-bluePrimary  active:scale-x-[.98]'>
+                        <Link href="" className="w-full" onClick={() => logout()}>Sair</Link>
                     </Button>          
                 </DropdownMenuItem>
             </DropdownMenuContent>

@@ -165,9 +165,9 @@ export default function UserSignUp() {
                         { errorMessage && <p className="text-red-600 tex-center">{errorMessage}</p> }
 
                         <Button
-                            className="w-full py-5"
+                            className="w-full py-5 bg-blueSecundary hover:bg-bluePrimary"
                             type="submit"
-                            >Sign up</Button>
+                            >Cadastrar</Button>
                     </form>
                     <Button className="w-full flex gap-2 mt-4" variant="secondary" onClick={handleLogInGoogle}>
                         Google
@@ -175,7 +175,7 @@ export default function UserSignUp() {
                     </Button>
                     
                     <h2 className="text-sm pt-4 text-center">Já possui cadastro?
-                    <Link href='/' className='font-semibold ml-1 underline'>Log in</Link>
+                        <Link href='/' className='font-semibold ml-1 underline'>Entrar</Link>
                     </h2>
                 </Form>
             </div>
