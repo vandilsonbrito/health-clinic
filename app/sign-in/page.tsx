@@ -20,6 +20,7 @@ import {
 import SignInWithGoogle from "../../firebase/auth/signInWithGoogle";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useDataFromDB } from "@/firebase/databaseCRUDFunctions";
 
  
 const formSchema = z.object({
@@ -32,15 +33,22 @@ const formSchema = z.object({
 export default function Home() {
 
     const router = useRouter();
-    const [errorMessage, setErrorMessage] = useState(0);
-    const [wasLoginButtonClicked, setWasLoginButtonClicked] = useState(false);
-    const [loadUser, setLoadUser] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string>('');
+    const [wasLoginButtonClicked, setWasLoginButtonClicked] = useState<boolean>(false);
+    const [loadUser, setLoadUser] = useState<boolean>(false);
+    
+    const { data: usersData } = useDataFromDB({ 
+      route: 'users/', 
+      queryKey: 'users-data',
+      
+    });
+
 
     useEffect(() => {
-        if(errorMessage === 0) return;
+        if(errorMessage === '') return;
 
         const waitErrorMessage = setTimeout(() => {
-          setErrorMessage(0);
+          setErrorMessage('');
         }, 3000);
 
         return () => clearInterval(waitErrorMessage);
@@ -60,19 +68,19 @@ export default function Home() {
         const { userCredential, error } = await SignIn(values.email, values.password);
 
         setWasLoginButtonClicked(true);
-        setErrorMessage(0);
+        setErrorMessage('');
         if(error) {
             setLoadUser(false);
             if(error && typeof error === 'object' && 'code' in error && error.code === 'auth/invalid-credential') {
-              setErrorMessage(1);
+              setErrorMessage('Email e/ou senha inválidos.');
               setWasLoginButtonClicked(false);
             }
             else if(error && typeof error === 'object' && 'code' in error && error.code === 'auth/too-many-requests') {
-              setErrorMessage(2);
+              setErrorMessage('Muitas tentativas, tente mais tarde.');
               setWasLoginButtonClicked(false);
             }
             else {
-              setErrorMessage(3);
+              setErrorMessage('Erro ao fazer login.');
             }
         }
         else if(userCredential?.user.uid){
@@ -86,9 +94,21 @@ export default function Home() {
 
       const { result, error } = await SignInWithGoogle();
       if (result) {
+        console.log("result", result)
+        const isUserSignedUp = Object.keys(usersData).includes(result.user.uid);
+        console.log("isUserSignedUp", isUserSignedUp)
+        if(!isUserSignedUp) { 
+          setLoadUser(false);
+          setErrorMessage('Cadastre-se primeiro.');
+          return;
+        }
         setLoadUser(false);
         return router.push('/agendamento');
-      } else {
+          
+        
+
+      } 
+      else {
         console.error('Error signing in with Google:', error);
         setLoadUser(false);
         return router.push('/');
@@ -108,7 +128,7 @@ export default function Home() {
           <div className="w-[22rem] shadow-lg rounded-xl px-7 py-10 relative">
               <Form {...form}>
 
-                  <div className={`w-full h-[455px] rounded-xl bg-[#e2e0e06e] text-white ${loadUser ? 'flex' : 'hidden'} flex-col justify-center items-center absolute top-0 left-0 z-10 roundex-xl`}>
+                  <div className={`w-full h-[472px] rounded-xl bg-[#e2e0e06e] text-white ${loadUser ? 'flex' : 'hidden'} flex-col justify-center items-center absolute top-0 left-0 z-10 roundex-xl`}>
                       <p className="loader"></p>
                   </div>
 
@@ -143,10 +163,7 @@ export default function Home() {
                         </FormItem>
                       )}
                     />
-                    { errorMessage === 1 && <p className="text-red-600">Email e/ou senha inválidos.</p> 
-                    || errorMessage === 2 && <p className="text-red-600">Muitas tentativas, tente mais tarde.</p> 
-                    || errorMessage === 3 && <p className="text-red-600">Erro ao fazer login.</p> 
-                    }
+                    <p className="text-red-600">{errorMessage}</p> 
                     <Button
                       className="w-full py-5 bg-blueSecundary hover:bg-bluePrimary"
                       type="submit"
