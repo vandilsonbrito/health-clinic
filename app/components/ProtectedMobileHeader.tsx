@@ -64,7 +64,7 @@ export default function ProtectedMobileHeader() {
                 <DropdownMenuSeparator/>
 
                 <DropdownMenuItem>
-                    <Button asChild className='px-7 max-w-28 bg-bluePrimary  active:scale-x-[.98]'>
+                    <Button asChild className='px-7 max-w-28 bg-bluePrimary hover:bg-blueSecundary  active:scale-x-[.98]'>
                         <Link href="" className="w-full" onClick={() => logout()}>Sair</Link>
                     </Button>          
                 </DropdownMenuItem>
