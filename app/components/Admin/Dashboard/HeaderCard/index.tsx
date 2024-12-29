@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { TiArrowRight } from "react-icons/ti";
 
-export default function index({ icon, title, amount }: { icon: React.ReactNode, title: string, amount: number}) {
+export default function HeaderCard({ icon, title, amount }: { icon: React.ReactNode, title: string, amount: number}) {
   return (
     <div className="w-[19rem] h-[6.2rem] flex flex-col border-2 border-slate-200 rounded-md ">
         <div className="w-full h-full flex items-center gap-4 p-[10px]">
