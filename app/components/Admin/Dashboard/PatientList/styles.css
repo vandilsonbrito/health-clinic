@@ -1,0 +1,8 @@
+.patient-list-container {
+    table tr {
+        @apply w-1/3
+    }
+    table tr td {
+        border: none;
+    }
+}
