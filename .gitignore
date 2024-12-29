@@ -38,3 +38,4 @@ next-env.d.ts
 #txt
 workflow.txt
 health-clinic-firebase-adminsdk.json
+.env
