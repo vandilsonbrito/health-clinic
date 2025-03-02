@@ -128,16 +128,13 @@ export default function Agendamento() {
                     position="top-center"
                     reverseOrder={false}
                 />
-                <div className="hidden xl:block">
-                    <Header/>
-                </div>
                 <div className="xl:hidden">
                     <ProtectedMobileHeader/>
                 </div>
                 <div className='w-full h-full min-h-[calc(100vh-4.5rem)] flex items-start bg-white '>
-                    <section className="w-[20%] 2xl:w-[30%] h-full min-h-[calc(100vh-4.5rem)] bg-blueSecundary pb-5 text-white  hidden xl:block ">
+                    <section className="w-[20%] 2xl:w-[18%] h-full min-h-[calc(100vh-4.5rem)] bg-blueSecundary pb-5 text-white  hidden xl:block ">
                         <nav className="w-full h-full flex flex-col py-5">
-                            <ul className='flex flex-col gap-2'>
+                            <ul className='flex flex-col gap-3'>
                                 <li>
                                     <button
                                         onClick={() => handleSection(1)}
@@ -165,7 +162,7 @@ export default function Agendamento() {
                             </ul>
                         </nav>
                     </section>
-                    <section className="w-full xl:w-[80%] 2xl:w-[70%] h-full p-2">
+                    <section className="w-full xl:w-[80%] 2xl:w-[82%] h-full p-2">
                         {section}
                     </section>
                 </div>

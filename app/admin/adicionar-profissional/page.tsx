@@ -72,10 +72,10 @@ export default function Professionals() {
         <div className="flex flex-col md:flex-row md:justify-between mb-6 lg:mb-10">
           <h1 className="text-[1.7rem] md:text-3xl font-bold">Cadastrar Profissionais</h1>
           <Button 
-            className="mt-8 md:mt-0"
+            className="mt-8 md:mt-0 bg-blueSecundary hover:bg-bluePrimary text-white"
             onClick={() => setShowForm(!showForm)}
             >
-            <Plus className="mr-2 h-4 w-4" /> Novo Profissional
+            {showForm ? "Cancelar" : (<><Plus className="mr-2 h-4 w-4" />Novo Profissional</>)}         
           </Button>
         </div>
 
@@ -135,7 +135,7 @@ export default function Professionals() {
                     />
                   </div>
                 </div>
-                <Button type="submit">Cadastrar Médico</Button>
+                <Button type="submit" className="bg-blueSecundary hover:bg-bluePrimary text-white">Cadastrar Médico</Button>
               </form>
             </CardContent>
           </Card>
