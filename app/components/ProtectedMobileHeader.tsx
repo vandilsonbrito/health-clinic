@@ -7,18 +7,10 @@ import { MenuIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useAuth } from '../../firebase/authContext';
-import useGlobalStore from '@/utils/globalStorage';
 
 export default function ProtectedMobileHeader() {
 
     const { logout } = useAuth();
-    const { setSectionNumber } = useGlobalStore();
-
-    const handleMenuClick = (sectionNum: number) => {
-        setSectionNumber(sectionNum);
-        //console.log("Clicou Seção",  sectionNum);
-    }
-
     return (
       <header className='w-full h-[4.5rem] flex justify-between items-center font-medium px-5 md:px-14 bg-white shadow-lg sticky top-0 z-50'>
           <Link href="/">
@@ -37,28 +29,27 @@ export default function ProtectedMobileHeader() {
                     <MenuIcon className="text-blueSecundary w-6 h-6 lg:w-5 lg:h-5"/>
                 </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="center" className="w-[200px]">
-
+            <DropdownMenuContent align="center" className="w-[200px] space-y-1">
                     <DropdownMenuItem>
-                        <Button 
-                            onClick={() => handleMenuClick(1)}
+                        <Link 
+                            href={"/cliente/agendar-consulta"}
                             className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
                             Marcar Consulta
-                        </Button>
+                        </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                        <Button 
-                            onClick={() => handleMenuClick(2)}
+                        <Link 
+                            href={"/cliente/minhas-consultas"}
                             className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
                             Consultas Agendadas
-                        </Button>
+                        </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                        <Button 
-                            onClick={() => handleMenuClick(3)}
+                        <Link 
+                            href={"/cliente/atualizar-perfil"}
                             className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
                             Atualizar Perfil
-                        </Button>
+                        </Link>
                     </DropdownMenuItem>
                     
                 <DropdownMenuSeparator/>
