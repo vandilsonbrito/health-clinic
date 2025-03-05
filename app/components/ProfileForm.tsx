@@ -1,4 +1,3 @@
-
 'use client';
 import React, { useEffect, useState } from 'react';
 import { z } from "zod";
@@ -124,16 +123,6 @@ export default function ProfileForm() {
             cellphone: userProfileData?.cellphone || "",
         });
 
-        /* setIsUserProfileDBFilled(false);
-        
-        const requiredFields = ['name', 'email', 'cpf', 'street', 'neighborhood', 'cityState', 'cellphone'];
-        const allFieldsFilled = areAllFieldsRequired(userProfileData, requiredFields);
-        if(allFieldsFilled) {
-            setIsUserProfileDBFilled(true);
-            console.log("TODOS OS CAMPOS PREENCHIDOS")
-            refetch();
-            console.log("REFETCH")
-        } */
     }, [userProfileData, form, userAuth, setIsUserProfileDBFilled]);
 
     useEffect(() => {
@@ -155,15 +144,15 @@ export default function ProfileForm() {
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="w-full max-w-5xl flex flex-wrap space-y-5 p-6 rounded-lg shadow-2xl"
+                    className="w-full flex flex-wrap space-y-5"
                     >
-                        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="w-full flex flex-col gap-4">
                             <FormField
                                 control={form.control}
                                 name="name"
                                 render={({ field }: { field: React.InputHTMLAttributes<HTMLInputElement> }) => (
                                 <FormItem>
-                                    <FormLabel>Nome</FormLabel>
+                                    <FormLabel className='font-medium'>Nome Completo</FormLabel>
                                     <FormControl>
                                     <Input type="name" placeholder={userAuth?.displayName || "nome"} {...field} value={userAuth?.displayName || userProfileData?.name || ""} disabled/>
                                     </FormControl>
@@ -176,7 +165,7 @@ export default function ProfileForm() {
                                 name="email"
                                 render={({ field }: { field: React.InputHTMLAttributes<HTMLInputElement> }) => (
                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
+                                    <FormLabel className='font-medium'>Email</FormLabel>
                                     <FormControl>
                                     <Input type="email" placeholder="email" {...field}
                                     value={userAuth?.email || ''} disabled
@@ -191,7 +180,7 @@ export default function ProfileForm() {
                                 name="cpf"
                                 render={({ field }: { field: React.InputHTMLAttributes<HTMLInputElement> }) => (
                                 <FormItem>
-                                    <FormLabel>CPF</FormLabel>
+                                    <FormLabel className='font-medium'>CPF</FormLabel>
                                     <FormControl ref={withMask("999.999.999-99")}>
                                     <Input type="text" placeholder="000.000.000-00" {...field}
                                     />
@@ -205,7 +194,7 @@ export default function ProfileForm() {
                                 name="street"
                                 render={({ field }: { field: React.InputHTMLAttributes<HTMLInputElement> }) => (
                                 <FormItem>
-                                    <FormLabel>Rua</FormLabel>
+                                    <FormLabel className='font-medium'>Rua</FormLabel>
                                     <FormControl>
                                     <Input type="address" placeholder="Rua Recife, 78" {...field}
                                     />
@@ -219,7 +208,7 @@ export default function ProfileForm() {
                                 name="neighborhood"
                                 render={({ field }: { field: React.InputHTMLAttributes<HTMLInputElement> }) => (
                                 <FormItem>
-                                    <FormLabel>Bairro</FormLabel>
+                                    <FormLabel className='font-medium'>Bairro</FormLabel>
                                     <FormControl>
                                     <Input type="address" placeholder="Centro" {...field}
                                     />
@@ -233,7 +222,7 @@ export default function ProfileForm() {
                                 name="cityState"
                                 render={({ field }: { field: React.InputHTMLAttributes<HTMLInputElement> }) => (
                                 <FormItem>
-                                    <FormLabel>Cidade/Estado</FormLabel>
+                                    <FormLabel className='font-medium'>Cidade/Estado</FormLabel>
                                     <FormControl>
                                     <Input type="address" placeholder="São Paulo, São Paulo" {...field}
                                     />
@@ -247,7 +236,7 @@ export default function ProfileForm() {
                                 name="cellphone"
                                 render={({ field }: { field: React.InputHTMLAttributes<HTMLInputElement> }) => (
                                 <FormItem>
-                                    <FormLabel>Celular</FormLabel>
+                                    <FormLabel className='font-medium'>Celular</FormLabel>
                                     <FormControl ref={withMask("(99) 99999-9999")}>
                                     <Input type="text" placeholder="(99) 99999-9999" {...field}
                                     />
@@ -258,17 +247,15 @@ export default function ProfileForm() {
                             />
             
                         </div>
-                        <div className="w-full flex justify-center items-center mt-5">
-                            <Button
-                                className="btn w-full md:w-1/3 py-5 font-semibold bg-blueSecundary hover:bg-bluePrimary "
-                                type="submit"
-                            >
-                                { saveButtonSate === 'initial' && 'Salvar' }
-                                { saveButtonSate === 'loading' ? <div className="spinner"></div> : null }
-                                { saveButtonSate === 'completed' && 'Informações Atualizadas' }
-                                { saveButtonSate === 'error' && 'Erro ao Atualizar' }
-                            </Button>
-                        </div>
+                        <Button
+                            className="btn w-full min-w-[10rem] md:w-auto py-5 font-semibold bg-blueSecundary hover:bg-bluePrimary "
+                            type="submit"
+                        >
+                            { saveButtonSate === 'initial' && 'Atualizar Perfil' }
+                            { saveButtonSate === 'loading' ? <div className="spinner"></div> : null }
+                            { saveButtonSate === 'completed' && 'Informações Atualizadas' }
+                            { saveButtonSate === 'error' && 'Erro ao Atualizar' }
+                        </Button>
                 </form>
             </Form>
         </>
