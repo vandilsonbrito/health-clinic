@@ -1,38 +1,17 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import Layout from "@/app/components/Admin/Layout"
 
-const appointments = [
-  {
-    patient: "João Silva",
-    doctor: "Dra. Maria Santos",
-    specialty: "Cardiologia",
-    date: "2024-03-15",
-    time: "09:00",
-    status: "confirmada",
-  },
-  {
-    patient: "Ana Oliveira",
-    doctor: "Dr. Carlos Ferreira",
-    specialty: "Ortopedia",
-    date: "2024-03-15",
-    time: "10:30",
-    status: "pendente",
-  },
-  {
-    patient: "Pedro Costa",
-    doctor: "Dra. Juliana Lima",
-    specialty: "Pediatria",
-    date: "2024-03-16",
-    time: "14:00",
-    status: "cancelada",
-  },
-]
+import Layout from "@/app/components/Admin/Layout"
+import { useFetchUserAppointmentsAdmin } from "@/firebase/firebaseDBServices"
+import { AppointmentFormatType } from "@/utils/types"
+import { Button } from "@/components/ui/button"
+import ModalUpdateAppointmentStatus from "@/app/components/Admin/ModalUpdateAppointmentStatus"
+import { orderByDate } from "@/utils/functions/orderByDate"
 
 const statusColors = {
   confirmada: "bg-green-500",
@@ -41,28 +20,39 @@ const statusColors = {
 }
 
 export default function Appointments() {
+
+  const { data, isLoading, refetch } = useFetchUserAppointmentsAdmin();
+  const userAppointments = data as AppointmentFormatType[]; 
   const [search, setSearch] = useState("")
   const [doctorFilter, setDoctorFilter] = useState("")
   const [statusFilter, setStatusFilter] = useState("")
+  const [selectedAppointment, setSelectedAppointment] = useState<AppointmentFormatType | null>()
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userAppointmentsData, setUserAppointmentsData] = useState(userAppointments);
 
-  const filteredAppointments = appointments.filter((appointment) => {
+  useEffect(() => {
+    setUserAppointmentsData(orderByDate(userAppointments));
+  }, [userAppointments])
 
-    const matchesSearch = appointment.patient.toLowerCase().includes(search.toLowerCase());
+  const filteredAppointments = userAppointmentsData?.filter((appointment) => {
+    if(!appointment) return false;
 
-    const matchesDoctor = (doctorFilter === "" || doctorFilter === "all") || appointment.doctor === doctorFilter;
-
+    const matchesSearch = appointment.patientName?.toLowerCase().includes(search.toLowerCase());
+    const matchesDoctor = (doctorFilter === "" || doctorFilter === "all") || appointment.professionalName === doctorFilter;
     const matchesStatus = (statusFilter === "" || statusFilter === "all") || appointment.status === statusFilter;
 
     return matchesSearch && matchesDoctor && matchesStatus;
   });
 
-  console.log('doctorFilter', doctorFilter)
-  console.log('statusFilter', statusFilter)
+  const handleReviseAppointment = (appointment: AppointmentFormatType) => {
+    setSelectedAppointment(appointment);
+    setIsModalOpen(true);
+  };
 
   return (
     <Layout>
-      <div className="w-full max-w-7xl mx-auto">
-        <h1 className="text-[1.7rem] md:text-3xl font-bold mb-6 lg:mb-10">Consultas Agendadas</h1>
+      <div>
+        <h1 className="text-3xl font-bold mb-6">Consultas Agendadas</h1>
         <div className="grid gap-4 mb-6 md:grid-cols-3">
           <Input
             type="search"
@@ -102,13 +92,15 @@ export default function Appointments() {
               <TableHead>Data</TableHead>
               <TableHead>Horário</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Ações</TableHead>
             </TableRow>
           </TableHeader>
+        { isLoading && <p className="mt-5 ml-3">Carregando...</p> }
           <TableBody>
-            {filteredAppointments.map((appointment, index) => (
-              <TableRow key={index}>
-                <TableCell>{appointment.patient}</TableCell>
-                <TableCell>{appointment.doctor}</TableCell>
+            {filteredAppointments?.map((appointment) => (
+              <TableRow key={appointment.id}>
+                <TableCell>{appointment.patientName}</TableCell>
+                <TableCell>{appointment.professionalName}</TableCell>
                 <TableCell>{appointment.specialty}</TableCell>
                 <TableCell>{appointment.date}</TableCell>
                 <TableCell>{appointment.time}</TableCell>
@@ -116,6 +108,22 @@ export default function Appointments() {
                   <Badge className={statusColors[appointment.status as keyof typeof statusColors]}>
                     {appointment.status}
                   </Badge>
+                </TableCell>
+                <TableCell>
+                    {appointment.status === "pendente" && (
+                      <>
+                        <Button variant="outline" size="sm" onClick={() => handleReviseAppointment(appointment)}>
+                            Revisar
+                        </Button>
+                        <ModalUpdateAppointmentStatus 
+                          isModalOpen={isModalOpen} 
+                          setIsModalOpen={setIsModalOpen} 
+                          selectedAppointment={selectedAppointment ?? {} as AppointmentFormatType} 
+                          setSelectedAppointment={setSelectedAppointment}
+                          refetch={refetch}
+                          />
+                      </>
+                    )}
                 </TableCell>
               </TableRow>
             ))}
