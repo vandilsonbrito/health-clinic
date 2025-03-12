@@ -21,7 +21,7 @@ const statusColors = {
 
 export default function Appointments() {
 
-  const { data, isLoading, refetch } = useFetchUserAppointmentsAdmin();
+  const { data, isLoading, refetch, isError } = useFetchUserAppointmentsAdmin();
   const userAppointments = data as AppointmentFormatType[]; 
   const [search, setSearch] = useState("")
   const [doctorFilter, setDoctorFilter] = useState("")
@@ -95,7 +95,8 @@ export default function Appointments() {
               <TableHead>Ações</TableHead>
             </TableRow>
           </TableHeader>
-        { isLoading && <p className="mt-5 ml-3">Carregando...</p> }
+          { isLoading && <p className="mt-5 ml-3">Carregando...</p> }
+          { isError && <p className="mt-5">Erro ao carregar dados.</p> }
           <TableBody>
             {filteredAppointments?.map((appointment) => (
               <TableRow key={appointment.id}>
