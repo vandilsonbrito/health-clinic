@@ -11,7 +11,7 @@ export default function UpdateProfile() {
                 <h1>Atualizar Perfil</h1>
             </div>
 
-            <div className="w-full h-full border mt-5 py-3 flex justify-center items-center">
+            <div className="w-full h-full mt-5 py-3 flex justify-center items-center">
                 <ProfileForm/>
             </div>
         </div>

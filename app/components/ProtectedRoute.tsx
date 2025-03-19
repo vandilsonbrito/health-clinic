@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../firebase/authContext';
 import { useEffect } from 'react';
-import { useDataFromDB } from '@/firebase/databaseCRUDFunctions';
+import { useDataFromDB } from '@/firebase/firebaseDBServices';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const { userAuth, authLoading } = useAuth();
