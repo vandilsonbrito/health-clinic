@@ -1,73 +1,58 @@
 "use client"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Layout from "@/app/components/Admin/Layout"
+import { useDataFromDB } from "@/firebase/firebaseDBServices"
+import FormNewDoctor from "@/app/components/Admin/FormNewDoctor"
+import { Toaster } from "react-hot-toast"
 
-// Exemplo de dados de médicos
-const doctors = [
-  {
-    id: 1,
-    name: "Dr. João Silva",
-    specialty: "Cardiologia",
-    crm: "123456",
-    phone: "(11) 98765-4321",
-    email: "joao.silva@example.com",
-    schedule: "Segunda e Quarta, 8h-17h",
-  },
-  {
-    id: 2,
-    name: "Dra. Maria Santos",
-    specialty: "Pediatria",
-    crm: "234567",
-    phone: "(11) 97654-3210",
-    email: "maria.santos@example.com",
-    schedule: "Terça e Quinta, 9h-18h",
-  },
-]
+type Schedule = {
+  date: string[];
+  time: string[];
+};
 
-export default function Professionals() {
+type Doctor = {
+  agenda: Schedule;
+  specialty: string;
+  name: string;
+  crm: string;
+  phone: string;
+  email: string;
+  id: number;
+};
+
+type DoctorsData = Record<string, Record<string, Doctor>>;
+
+export default function Doctors() {
+
+  const { data, refetch, isLoading, isError } = useDataFromDB({ route: "services/consultation", queryKey: "doctors-data" })
   const [search, setSearch] = useState("")
   const [showForm, setShowForm] = useState(false)
-  const [newDoctor, setNewDoctor] = useState({
-    name: "",
-    specialty: "",
-    crm: "",
-    phone: "",
-    email: "",
-    schedule: "",
-  })
+  
+  
+  const doctorsData: Doctor[] = useMemo(() => {
+    if (!data) return [];
+  
+    return Object.values(data as DoctorsData).flatMap(specialty => Object.values(specialty));
+  }, [data]);
+  console.log('doctorsData', doctorsData);
+  
 
-  const filteredDoctors = doctors.filter(
+  const filteredDoctors = doctorsData && doctorsData.filter(
     (doctor) =>
-      doctor.name.toLowerCase().includes(search.toLowerCase()) ||
-      doctor.specialty.toLowerCase().includes(search.toLowerCase()),
+      doctor.name?.toLowerCase().includes(search.toLowerCase()) ||
+      doctor.specialty?.toLowerCase().includes(search.toLowerCase()),
   )
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setNewDoctor({ ...newDoctor, [name]: value })
-  }
-
-  const handleSelectChange = (value: string) => {
-    setNewDoctor({ ...newDoctor, specialty: value })
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Aqui você adicionaria a lógica para salvar o novo médico no banco de dados
-    console.log("Novo médico:", newDoctor)
-    setShowForm(false)
-    setNewDoctor({ name: "", specialty: "", crm: "", phone: "", email: "", schedule: "" })
-  }
 
   return (
     <Layout>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
       <div className="w-full max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:justify-between mb-6 lg:mb-10">
           <h1 className="text-[1.7rem] md:text-3xl font-bold">Cadastrar Profissionais</h1>
@@ -80,65 +65,7 @@ export default function Professionals() {
         </div>
 
         {showForm && (
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>Cadastrar Novo Médico</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Nome</Label>
-                    <Input id="name" name="name" value={newDoctor.name} onChange={handleInputChange} required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="specialty">Especialidade</Label>
-                    <Select onValueChange={handleSelectChange}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione a especialidade" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Cardiologia">Cardiologia</SelectItem>
-                        <SelectItem value="Pediatria">Pediatria</SelectItem>
-                        <SelectItem value="Ortopedia">Ortopedia</SelectItem>
-                        {/* Adicione mais especialidades conforme necessário */}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="crm">CRM</Label>
-                    <Input id="crm" name="crm" value={newDoctor.crm} onChange={handleInputChange} required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Telefone</Label>
-                    <Input id="phone" name="phone" value={newDoctor.phone} onChange={handleInputChange} required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={newDoctor.email}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="schedule">Horários de Atendimento</Label>
-                    <Input
-                      id="schedule"
-                      name="schedule"
-                      value={newDoctor.schedule}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                </div>
-                <Button type="submit" className="bg-blueSecundary hover:bg-bluePrimary text-white">Cadastrar Médico</Button>
-              </form>
-            </CardContent>
-          </Card>
+          <FormNewDoctor setShowForm={setShowForm} refetch={refetch}/>
         )}
 
         <div className="mb-4">
@@ -149,30 +76,35 @@ export default function Professionals() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Nome</TableHead>
-              <TableHead>Especialidade</TableHead>
-              <TableHead>CRM</TableHead>
-              <TableHead>Telefone</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Horários de Atendimento</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredDoctors.map((doctor) => (
-              <TableRow key={doctor.id}>
-                <TableCell>{doctor.name}</TableCell>
-                <TableCell>{doctor.specialty}</TableCell>
-                <TableCell>{doctor.crm}</TableCell>
-                <TableCell>{doctor.phone}</TableCell>
-                <TableCell>{doctor.email}</TableCell>
-                <TableCell>{doctor.schedule}</TableCell>
+        { isLoading && <span className="mt-5 ml-3">Carregando...</span> }
+        { isError && <span className="mt-5">Erro ao carregar dados.</span> }
+        { !isLoading && !isError && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nome</TableHead>
+                <TableHead>Especialidade</TableHead>
+                <TableHead>CRM</TableHead>
+                <TableHead>Telefone</TableHead>
+                <TableHead>Email</TableHead>
+                {/* <TableHead>Horários de Atendimento</TableHead> */}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            
+            <TableBody>
+              {filteredDoctors?.map((doctor) => (
+                <TableRow key={doctor.id}>
+                  <TableCell>{doctor.name}</TableCell>
+                  <TableCell>{doctor.specialty}</TableCell>
+                  <TableCell>{doctor.crm}</TableCell>
+                  <TableCell>{doctor.phone}</TableCell>
+                  <TableCell>{doctor.email}</TableCell>
+                  {/* <TableCell>{doctor.agenda}</TableCell> */}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </div>
     </Layout>
   )
