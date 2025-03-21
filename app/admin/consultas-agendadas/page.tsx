@@ -83,7 +83,8 @@ export default function Appointments() {
         </div>
         { isLoading && <span className="mt-5 ml-3">Carregando...</span> }
         { isError && <span className="mt-5">Erro ao carregar dados.</span> }
-        { !isLoading && !isError && (
+        { !isLoading && !isError && filteredAppointments.length === 0 && <p className="mt-5">Nenhuma consulta encontrada.</p> }
+        { !isLoading && !isError && filteredAppointments.length > 0 && (
           <Table>
             <TableHeader>
               <TableRow>
