@@ -12,9 +12,6 @@ import ModalUpdateAppointmentStatus from "@/app/components/Admin/ModalUpdateAppo
 import { format, parseISO } from "date-fns"
 import useAppointmentsAdmin from "@/hooks/useAppointmentsAdmin"
 
-//import {specialistsData} from "../../../mock-specialists-data"
-//import {addDataToDB} from "@/firebase/firebaseDBServices"
-
 const statusColors = {
   confirmada: "bg-green-500",
   pendente: "bg-yellow-500",
@@ -23,7 +20,6 @@ const statusColors = {
 
 export default function Appointments() {
 
-  //addDataToDB({ route: `services`, data: specialistsData })
   const {
     filteredAppointments,
     isLoading,
@@ -64,9 +60,13 @@ export default function Appointments() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todos os médicos</SelectItem>
-              <SelectItem value="Dra. Maria Santos">Dra. Maria Santos</SelectItem>
-              <SelectItem value="Dr. Carlos Ferreira">Dr. Carlos Ferreira</SelectItem>
-              <SelectItem value="Dra. Juliana Lima">Dra. Juliana Lima</SelectItem>
+              {
+                filteredAppointments.map((appointment) => (
+                  <SelectItem key={appointment.id} value={appointment.professionalName}>
+                    {appointment.professionalName}
+                  </SelectItem>
+                ))
+              }
             </SelectContent>
           </Select>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
