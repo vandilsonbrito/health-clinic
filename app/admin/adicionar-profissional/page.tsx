@@ -37,9 +37,7 @@ export default function Doctors() {
     if (!data) return [];
   
     return Object.values(data as DoctorsData).flatMap(specialty => Object.values(specialty));
-  }, [data]);
-  console.log('doctorsData', doctorsData);
-  
+  }, [data]);  
 
   const filteredDoctors = doctorsData && doctorsData.filter(
     (doctor) =>
