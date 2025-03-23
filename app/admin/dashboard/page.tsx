@@ -1,43 +1,44 @@
 "use client"
 
-import { Line } from "react-chartjs-2"
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js"
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Layout from "../../components/Admin/Layout"
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
-
-const chartData = {
-  labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"],
-  datasets: [
-    {
-      label: "Consultas Mensais",
-      data: [65, 59, 80, 81, 56, 55],
-      fill: false,
-      borderColor: "rgb(75, 192, 192)",
-      tension: 0.1,
-    },
-  ],
-}
-
-const todayAppointments = [
-  { patient: "João Silva", doctor: "Dra. Maria Santos", specialty: "Cardiologia", time: "09:00" },
-  { patient: "Ana Oliveira", doctor: "Dr. Carlos Ferreira", specialty: "Ortopedia", time: "10:30" },
-  { patient: "Pedro Costa", doctor: "Dra. Juliana Lima", specialty: "Pediatria", time: "14:00" },
-  { patient: "Mariana Souza", doctor: "Dr. Ricardo Alves", specialty: "Dermatologia", time: "16:30" },
-]
+import { useDataFromDB, useFetchUserAppointmentsAdmin, useLastSixMonthsAppointments } from "@/firebase/firebaseDBServices"
+import { useMemo } from "react"
+import { AppointmentFormatType } from "@/utils/types"
+import { format, parse } from "date-fns"
+import { ptBR } from 'date-fns/locale';
 
 export default function Dashboard() {
+  
+  const { data } = useFetchUserAppointmentsAdmin();
+  const { data: lastMonthsAppointments, isLoading: isLoadingLastSixMonths, isError: isErrorLastSixMonths } = useLastSixMonthsAppointments();
+  const { data: registeredPatientsData } = useDataFromDB({route: 'users', queryKey: 'registered-patients-data' });
+  const numberOfPatients = registeredPatientsData && Object.keys(registeredPatientsData).length || 0;
+  
+  const filteredAppointmertsForToday = useMemo(() => {
+    return (data as AppointmentFormatType[])?.filter((appointment) => {
+      if(appointment.status !== 'confirmada') return false;
+      
+      const today = Number(new Date().toLocaleDateString('pt-BR', { day: '2-digit' }))
+      const appointmentDate = new Date(appointment.date);
+      
+      return today === appointmentDate.getUTCDate();
+    });
+  }, [data]);
+
+  const months = lastMonthsAppointments?.map((appointment) => {
+    const date = parse(appointment.month, "yyyy-MM", new Date());  
+    const monthName = format(date, "MMM", { locale: ptBR });
+    return monthName
+  });
+  const monthsData = lastMonthsAppointments?.map((appointment) => ({
+    month: format(parse(appointment.month, "yyyy-MM", new Date()), "MMM yyyy", { locale: ptBR }), // "2025-03" → "Mar"
+    count: appointment.count ?? 0, // Evita undefined
+  })).reverse();
+  
   return (
     <Layout>
       <div className="w-full max-w-7xl mx-auto">  
@@ -48,7 +49,7 @@ export default function Dashboard() {
               <CardTitle className="text-sm font-medium">Consultas Marcadas Para Hoje</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{todayAppointments.length}</div>
+              <div className="text-2xl font-bold">{filteredAppointmertsForToday?.length || 0}</div>
             </CardContent>
           </Card>
           <Card>
@@ -56,18 +57,10 @@ export default function Dashboard() {
               <CardTitle className="text-sm font-medium">Total de Pacientes Cadastrados</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">478</div>
+              <div className="text-2xl font-bold">{numberOfPatients || 'Erro ao carregar'}</div>
             </CardContent>
           </Card>
         </div>
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Consultas Mensais nos Últimos 6 Meses</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Line data={chartData} />
-          </CardContent>
-        </Card>
         <Card>
           <CardHeader>
             <CardTitle>Consultas Agendadas para Hoje</CardTitle>
@@ -83,16 +76,39 @@ export default function Dashboard() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {todayAppointments.map((appointment, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{appointment.patient}</TableCell>
-                    <TableCell>{appointment.doctor}</TableCell>
-                    <TableCell>{appointment.specialty}</TableCell>
-                    <TableCell>{appointment.time}</TableCell>
-                  </TableRow>
-                ))}
+                {
+                  filteredAppointmertsForToday?.map((appointment) => (
+                    <TableRow key={appointment.id}>
+                      <TableCell>{appointment?.patientName}</TableCell>
+                      <TableCell>{appointment?.professionalName}</TableCell>
+                      <TableCell>{appointment?.specialty}</TableCell>
+                      <TableCell>{appointment?.time}</TableCell>
+                    </TableRow>
+                    )
+                  )
+                }
               </TableBody>
             </Table>
+          </CardContent>
+        </Card>
+        <Card className="my-8">
+          <CardHeader>
+            <CardTitle>{`Consultas mensais nos últimos ${months?.length} meses`}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            { isLoadingLastSixMonths && <span className="mt-5 ml-3">Carregando...</span> }
+            { isErrorLastSixMonths && <span className="mt-5">Erro ao carregar dados.</span> }
+            { !isLoadingLastSixMonths && !isErrorLastSixMonths && (
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={monthsData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="count" stroke="#0693DA" />
+                </LineChart>
+              </ResponsiveContainer>          
+            )}
           </CardContent>
         </Card>
       </div>
