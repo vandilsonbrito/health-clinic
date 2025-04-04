@@ -57,7 +57,7 @@ export default function Dashboard() {
               <CardTitle className="text-sm font-medium">Total de Pacientes Cadastrados</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{numberOfPatients || 'Erro ao carregar'}</div>
+              <div className="text-2xl font-bold">{numberOfPatients || 0}</div>
             </CardContent>
           </Card>
         </div>
