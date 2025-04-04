@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useState } from 'react';
 import Logo from '../../public/logo-clinica-saude.png';
 import Image from 'next/image';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { useAuth } from '../../firebase/authContext';
 
 export default function ProtectedMobileHeader() {
-
+    const [userRole] = useState<'admin' | 'user'>("admin");
     const { logout } = useAuth();
     return (
       <header className='w-full h-[4.5rem] flex justify-between items-center font-medium px-5 md:px-14 bg-white shadow-lg sticky top-0 z-50'>
@@ -30,28 +30,68 @@ export default function ProtectedMobileHeader() {
                 </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="center" className="w-[200px] space-y-1">
-                    <DropdownMenuItem>
-                        <Link 
-                            href={"/cliente/agendar-consulta"}
-                            className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
-                            Marcar Consulta
-                        </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Link 
-                            href={"/cliente/minhas-consultas"}
-                            className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
-                            Consultas Agendadas
-                        </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Link 
-                            href={"/cliente/atualizar-perfil"}
-                            className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
-                            Atualizar Perfil
-                        </Link>
-                    </DropdownMenuItem>
-                    
+                {
+                    userRole === 'admin' && (
+                        <>
+                            <DropdownMenuItem>
+                                <Link 
+                                    href={"/admin/dashboard"}
+                                    className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
+                                    Dashboard
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                <Link 
+                                    href={"/admin/adicionar-profissional"}
+                                    className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
+                                    Cadastrar Profissionais
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                <Link 
+                                    href={"/admin/consultas-agendadas"}
+                                    className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
+                                    Consultas Agendadas
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                <Link 
+                                    href={"/admin/pacientes-cadastrados"}
+                                    className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
+                                    Pacientes Cadastrados
+                                </Link>
+                            </DropdownMenuItem>
+                        </>
+                    )
+
+                }
+                {
+                    userRole === 'user' && (
+                        <>
+                            <DropdownMenuItem>
+                                <Link 
+                                    href={"/cliente/agendar-consulta"}
+                                    className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
+                                    Marcar Consulta
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                <Link 
+                                    href={"/cliente/minhas-consultas"}
+                                    className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
+                                    Consultas Agendadas
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                <Link 
+                                    href={"/cliente/atualizar-perfil"}
+                                    className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
+                                    Atualizar Perfil
+                                </Link>
+                            </DropdownMenuItem>
+                        </>
+                    )
+                }
                 <DropdownMenuSeparator/>
 
                 <DropdownMenuItem>
