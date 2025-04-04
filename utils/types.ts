@@ -61,7 +61,7 @@ export interface UserProfileData {
     nextAppointments: string[]
 }
 interface LastAppointmentDateType {
-    lastAppointmentDate: Date
+    lastAppointmentDate: string
 }
 interface TotalOfAppointmentsType {
     totalOfAppointments: number
