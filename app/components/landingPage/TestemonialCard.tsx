@@ -25,9 +25,7 @@ export default function TestemonialCard({ url, name, feedback }: { url: StaticIm
             </div>
         </div>
         <p className='flex'>
-            {/* <RiDoubleQuotesL /> */}
-                <i>{feedback}</i>
-            {/* <RiDoubleQuotesR /> */}
+            <i>{feedback}</i>
         </p>
     </div>
   )
