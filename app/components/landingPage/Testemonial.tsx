@@ -29,7 +29,7 @@ export default function Testemonials() {
               <CarouselContainer/>
           </div>
         </div>
-        <Link href='/agendamento' className="w-60 flex items-center justify-center p-3 text-white bg-bluePrimary hover:shadow-2xl ease-linear rounded-xl gap-3 text-[1.1rem] font-semibold">
+        <Link href='/cliente/agendar-consulta' className="w-60 flex items-center justify-center p-3 text-white bg-bluePrimary hover:shadow-2xl ease-linear rounded-xl gap-3 text-[1.1rem] font-semibold">
             Agendar consulta
             <MoveRight />
         </Link>
