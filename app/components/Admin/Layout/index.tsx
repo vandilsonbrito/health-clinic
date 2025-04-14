@@ -12,7 +12,7 @@ import ProtectedMobileHeader from "../../ProtectedMobileHeader";
 
 const navItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: Grid },
-  { href: "/admin/adicionar-profissional", label: "Cadastrar Profissionais", icon: UserPlus },
+  { href: "/admin/profissionais-cadastrados", label: "Profissionais Cadastrados", icon: UserPlus },
   { href: "/admin/consultas-agendadas", label: "Consultas Agendadas", icon: Calendar },
   { href: "/admin/pacientes-cadastrados", label: "Pacientes Cadastrados", icon: Users },
 ]
