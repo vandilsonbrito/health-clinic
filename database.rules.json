@@ -1,0 +1,52 @@
+{
+  "rules": {
+    "users": {
+      ".read": "auth != null && auth.uid === 'byDjjPQWiOae22LomZ3IkYE9GC73'",
+      ".write": "auth != null && auth.uid === 'byDjjPQWiOae22LomZ3IkYE9GC73'",
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+
+    "appointments": {
+      ".read": "auth != null && (auth.uid === 'byDjjPQWiOae22LomZ3IkYE9GC73' || (query.orderByChild === 'patientId' && query.equalTo === auth.uid))",
+      ".indexOn": ["patientId", "professionalName", "professionalName_date_time"],
+      "$appointmentId": {
+        ".read": "auth != null && data.child('patientId').val() === auth.uid",
+        ".write": "auth != null && (auth.uid === 'byDjjPQWiOae22LomZ3IkYE9GC73' || (!data.exists() && newData.child('patientId').val() === auth.uid && newData.child('status').val() === 'pendente' && newData.child('startsAt').isNumber() && newData.child('startsAt').val() > now) || (data.exists() && newData.exists() && data.child('patientId').val() === auth.uid && newData.child('patientId').val() === auth.uid && data.child('status').val() !== 'cancelada' && newData.child('status').val() === 'cancelada' && data.child('startsAt').isNumber() && data.child('startsAt').val() - now > 86400000 && newData.child('startsAt').val() === data.child('startsAt').val() && newData.child('date').val() === data.child('date').val() && newData.child('time').val() === data.child('time').val() && newData.child('professionalName').val() === data.child('professionalName').val()))",
+        ".validate": "newData.hasChildren(['patientId', 'professionalName', 'date', 'time', 'status']) && newData.child('status').val().matches(/^(pendente|confirmada|cancelada)$/)"
+      }
+    },
+
+    "bookedSlots": {
+      ".read": "auth != null",
+      ".write": "auth != null && auth.uid === 'byDjjPQWiOae22LomZ3IkYE9GC73'",
+      "$specialtyKey": {
+        "$doctorKey": {
+          "$date": {
+            "$time": {
+              ".write": "auth != null && ((!data.exists() && newData.child('patientId').val() === auth.uid) || (data.exists() && !newData.exists() && data.child('patientId').val() === auth.uid))",
+              ".validate": "newData.hasChildren(['patientId', 'appointmentId']) && root.child('services').child('consultation').child($specialtyKey).child($doctorKey).exists()"
+            }
+          }
+        }
+      }
+    },
+
+    "services": {
+      ".read": "auth != null",
+      ".write": "auth != null && auth.uid === 'byDjjPQWiOae22LomZ3IkYE9GC73'"
+    },
+
+    "specialties": {
+      ".read": "auth != null",
+      ".write": "auth != null && auth.uid === 'byDjjPQWiOae22LomZ3IkYE9GC73'"
+    },
+
+    "clinicInfo": {
+      ".read": "auth != null && auth.uid === 'byDjjPQWiOae22LomZ3IkYE9GC73'",
+      ".write": "auth != null && auth.uid === 'byDjjPQWiOae22LomZ3IkYE9GC73'"
+    }
+  }
+}
