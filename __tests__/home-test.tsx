@@ -1,16 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import Header from '../app/components/Header';
+import BtnLogIn from '../app/components/landingPage/BtnLogIn';
 
-describe('<Header />', () => {
-    
-    it('should render the Header', () => {
-        render(<Header />)
+describe('<BtnLogIn />', () => {
+
+    it('mostra o link de login apontando para /sign-in', () => {
+        render(<BtnLogIn />)
 
         expect(
-            screen.getByRole('link', { name: /login/i })
-        ).toBeInTheDocument()
+            screen.getByRole('link', { name: /entrar/i })
+        ).toHaveAttribute('href', '/sign-in')
     });
 });
 
