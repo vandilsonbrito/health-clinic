@@ -1,13 +1,15 @@
 "use client"
 import Link from "next/link"
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect } from "react"
 import { Grid, Users, Calendar, LogOut, UserPlus} from "lucide-react"
-import type React from "react" 
+import type React from "react"
 import Image from "next/image"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/firebase/authContext";
+import { isAdmin } from "@/utils/constants";
 import ProtectedMobileHeader from "../../ProtectedMobileHeader";
 
 const navItems = [
@@ -19,8 +21,24 @@ const navItems = [
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { logout } = useAuth();
+  const router = useRouter();
+  const { userAuth, authLoading, logout } = useAuth();
+  const allowed = isAdmin(userAuth?.uid);
 
+  // Área do admin: sem login vai para o sign-in; paciente vai para a área dele.
+  useEffect(() => {
+    if (authLoading) return;
+    if (!userAuth) router.push("/sign-in");
+    else if (!allowed) router.push("/cliente/agendar-consulta");
+  }, [userAuth, authLoading, allowed, router]);
+
+  if (authLoading || !allowed) {
+    return (
+      <div className="w-full min-h-screen flex flex-col justify-center items-center">
+        <p className="text-lg">Carregando...</p>
+      </div>
+    );
+  }
 
   return (
     <>
