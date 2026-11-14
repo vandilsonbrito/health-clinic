@@ -7,6 +7,8 @@ export interface AuthContextType {
     authLoading: boolean; 
 }
 
+export type AppointmentStatus = 'pendente' | 'confirmada' | 'cancelada';
+
 export interface AppointmentFormatType {
     id: string,
     specialty: string,
@@ -15,7 +17,19 @@ export interface AppointmentFormatType {
     time: string,
     status: string,
     patientId: string,
-    patientName: string
+    patientName: string,
+    // Campos gravados a partir do agendamento novo (consultas antigas não têm)
+    specialtyKey?: string,
+    doctorKey?: string,
+    startsAt?: number,
+    createdAt?: number,
+    professionalName_date_time?: string
+}
+
+// Médico lido de services/consultation/<specialtyKey>/<doctorKey>
+export interface Doctor extends ProfessionalData {
+    specialtyKey: string,
+    doctorKey: string
 }
 export interface AppointmentDateTime {
     date: string, 
