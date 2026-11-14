@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React from 'react';
 import Logo from '../../public/logo-clinica-saude.png';
 import Image from 'next/image';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -8,8 +8,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useAuth } from '../../firebase/authContext';
 
-export default function ProtectedMobileHeader() {
-    const [userRole] = useState<'admin' | 'user'>("admin");
+export default function ProtectedMobileHeader({ userRole = 'admin' }: { userRole?: 'admin' | 'user' }) {
     const { logout } = useAuth();
     return (
       <header className='w-full h-[4.5rem] flex justify-between items-center font-medium px-5 md:px-14 bg-white shadow-lg sticky top-0 z-50'>
