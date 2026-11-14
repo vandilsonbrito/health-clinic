@@ -7,20 +7,29 @@ export interface AuthContextType {
     authLoading: boolean; 
 }
 
-export interface ProfessionalData {
-    name: string;
-    especiality: string;
-    agenda: {
-        date: string[],
-        time: string[]
-    }
-}
+export type AppointmentStatus = 'pendente' | 'confirmada' | 'cancelada';
 
 export interface AppointmentFormatType {
-    especiality: string,
+    id: string,
+    specialty: string,
     professionalName: string,
     date: string,
-    time: string
+    time: string,
+    status: string,
+    patientId: string,
+    patientName: string,
+    // Campos gravados a partir do agendamento novo (consultas antigas não têm)
+    specialtyKey?: string,
+    doctorKey?: string,
+    startsAt?: number,
+    createdAt?: number,
+    professionalName_date_time?: string
+}
+
+// Médico lido de services/consultation/<specialtyKey>/<doctorKey>
+export interface Doctor extends ProfessionalData {
+    specialtyKey: string,
+    doctorKey: string
 }
 export interface AppointmentDateTime {
     date: string, 
@@ -34,17 +43,23 @@ export interface SectionsObjType {
 export interface ServicesDataType {
     especiality: ProfessionalData
 }
-export interface ProfessionalData {
+export interface ProfessionalDataRoute {
     [key: number]: {
-        professionalName: {
-            especiality: string,
-            name: string,
-            agenda: {
-                date: string[],
-                time: string[]
-            }
-        }
+        [key: string]: ProfessionalData
     }
+}
+export interface ProfessionalData {
+    specialty: string,
+    name: string,
+    agenda: {
+        date: string[],
+        time: string[]
+    },
+    crm: string,
+    phone: string,
+    email: string
+    pix_key: string,
+    id: string
 }
 
 export interface UserProfileData {
@@ -55,4 +70,26 @@ export interface UserProfileData {
     neighborhood: string,
     cityState: string,
     cellphone: string
+    lastAppointmentDate: string,
+    totalOfAppointments: number,
+    nextAppointments: string[]
 }
+interface LastAppointmentDateType {
+    lastAppointmentDate: string
+}
+interface TotalOfAppointmentsType {
+    totalOfAppointments: number
+}
+interface NextAppointmentsType {
+    nextAppointments: string[]
+}
+interface AppointmentStatusType {
+    status: string
+}
+
+export type UpdateProfileType = 
+    UserProfileData | 
+    LastAppointmentDateType | 
+    NextAppointmentsType | 
+    TotalOfAppointmentsType | 
+    AppointmentStatusType

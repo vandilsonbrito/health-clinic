@@ -1,14 +1,32 @@
 import admin from 'firebase-admin';
 
+// Normaliza a chave privada para o formato PEM, aceitando "\n" literais
+// ou a chave inteira numa linha só (como está salva na Vercel).
+function normalizePrivateKey(rawKey?: string) {
+  if (!rawKey) return undefined;
+
+  const header = '-----BEGIN PRIVATE KEY-----';
+  const footer = '-----END PRIVATE KEY-----';
+  const body = rawKey
+    .replace(/^"|"$/g, '')
+    .replace(/\\n/g, '')
+    .replace(header, '')
+    .replace(footer, '')
+    .replace(/\s/g, '');
+
+  const lines = body.match(/.{1,64}/g) ?? [];
+  return `${header}\n${lines.join('\n')}\n${footer}\n`;
+}
+
 // Verifica se o Firebase Admin já foi inicializado
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert({
       projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'), 
+      privateKey: normalizePrivateKey(process.env.FIREBASE_PRIVATE_KEY),
     }),
-    databaseURL: `https://${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.firebaseio.com`,
+    databaseURL: `https://${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}-default-rtdb.firebaseio.com`,
   });
 }
 

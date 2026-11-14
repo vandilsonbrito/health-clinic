@@ -117,7 +117,7 @@ export default function ScheduledConsultation() {
                             (
                                 <div className="w-full h-full max-h-[calc(100vh-333px)] overflow-auto ">
                                     <table className='w-full h-full text-[.75rem] md:text-base'>
-                                        <thead className='bg-[#e9f1f8da] font-semibold uppercase'>
+                                        <thead className='bg-[#e9f1f8da] font-semibold uppercase  scheduled-consultation-table'>
                                             <tr>
                                                 <td className='text-center'>Data/Hora</td>
                                                 <td className='text-center'>Profissional</td>

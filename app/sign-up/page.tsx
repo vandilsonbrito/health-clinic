@@ -76,7 +76,7 @@ export default function UserSignUp() {
 
             setLoadUser(false);
             setCameFromSignUp(true);
-            return router.push('/agendamento');
+            return router.push('/cliente/agendar-consulta');
         }
 
     }
@@ -94,7 +94,7 @@ export default function UserSignUp() {
 
             setLoadUser(false);
             setCameFromSignUp(true);
-            return router.push('/agendamento');
+            return router.push('/cliente/agendar-consulta');
         } else {
             console.error('Error signing in with Google:', error);
             setLoadUser(false);

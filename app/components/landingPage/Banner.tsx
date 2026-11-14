@@ -8,7 +8,7 @@ export default function Banner() {
 
             <div className="w-full lg:w-1/2 h-full flex flex-col justify-start lg:justify-center gap-8 lg:gap-5 px-10 md:px-36 lg:pl-32 lg:pr-14 ">
                 <h1 className="text-3xl md:text-4xl lg:text-[3rem] text-white font-bold lg:leading-[3.1rem]">Sua Saúde é nossa prioridade.</h1>
-                <Link href='/agendamento' className="w-full lg:w-60 flex items-center justify-center px-3 py-2 bg-white text-bluePrimary hover:shadow-2xl ease-linear rounded-lg gap-3 text-[1.1rem] font-semibold">
+                <Link href='/cliente/agendar-consulta' className="w-full lg:w-60 flex items-center justify-center px-3 py-2 bg-white text-bluePrimary hover:shadow-2xl ease-linear rounded-lg gap-3 text-[1.1rem] font-semibold">
                     Agendar consulta
                     <MoveRight />
                 </Link>

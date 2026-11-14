@@ -59,7 +59,10 @@ export default function Header() {
                     </DropdownMenu>  
                   </nav>
                   <nav className="hidden lg:block">
-                    <Button asChild className='px-7 max-w-28 bg-bluePrimary hover:bg-blueSecundary active:scale-x-[.98]'>
+                    <Button 
+                      asChild 
+                      className='px-7 max-w-28 font-bold text-[0.95rem] bg-bluePrimary hover:bg-blueSecundary active:scale-x-[.98]'
+                      >
                           <Link href="" className="w-full" onClick={() => logout()}>Sair</Link>
                       </Button>  
                   </nav>
