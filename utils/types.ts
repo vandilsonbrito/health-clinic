@@ -70,9 +70,10 @@ export interface UserProfileData {
     neighborhood: string,
     cityState: string,
     cellphone: string
-    lastAppointmentDate: string,
-    totalOfAppointments: number,
-    nextAppointments: string[]
+    // Campos legados: hoje são calculados a partir das consultas
+    lastAppointmentDate?: string,
+    totalOfAppointments?: number,
+    nextAppointments?: string[]
 }
 interface LastAppointmentDateType {
     lastAppointmentDate: string

@@ -35,10 +35,9 @@ export default function ProfileForm() {
             neighborhood: values.neighborhood,
             cityState: values.cityState,
             cellphone: values.cellphone,
-            lastAppointmentDate: '',
-            totalOfAppointments: 0,
-            nextAppointments: ['']
-        } 
+            // Total e última consulta são calculados pelo admin a partir das consultas;
+            // não regravar aqui para não zerar dados existentes.
+        }
         setSaveButtonState('loading');
         const itWasUpdated = await updateDBData({ 
             route: 'users/' + userAuth?.uid + '/profile', 
