@@ -20,7 +20,10 @@ import {
 import SignInWithGoogle from "../../firebase/auth/signInWithGoogle";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useDataFromDB } from "@/firebase/databaseCRUDFunctions";
+import { get, ref } from "firebase/database";
+import { signOut } from "firebase/auth";
+import { database } from "@/firebase/firebaseDBConfig";
+import { auth } from "@/firebase/firebaseAuthConfig";
 
  
 const formSchema = z.object({
@@ -36,13 +39,6 @@ export default function Home() {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [wasLoginButtonClicked, setWasLoginButtonClicked] = useState<boolean>(false);
     const [loadUser, setLoadUser] = useState<boolean>(false);
-    
-    const { data: usersData } = useDataFromDB({ 
-      route: 'users/', 
-      queryKey: 'users-data',
-      
-    });
-
 
     useEffect(() => {
         if(errorMessage === '') return;
@@ -85,7 +81,7 @@ export default function Home() {
         }
         else if(userCredential?.user.uid){
           setLoadUser(false);
-          return router.push('/agendamento');
+          return router.push('/cliente/agendar-consulta');
         }
     }
     
@@ -94,16 +90,16 @@ export default function Home() {
 
       const { result, error } = await SignInWithGoogle();
       if (result) {
-        console.log("result", result)
-        const isUserSignedUp = Object.keys(usersData).includes(result.user.uid);
-        console.log("isUserSignedUp", isUserSignedUp)
-        if(!isUserSignedUp) { 
+        // Lê só o perfil do próprio usuário (as regras não permitem listar todos).
+        const profileSnapshot = await get(ref(database, `users/${result.user.uid}/profile`));
+        if(!profileSnapshot.exists()) {
+          await signOut(auth);
           setLoadUser(false);
           setErrorMessage('Cadastre-se primeiro.');
           return;
         }
         setLoadUser(false);
-        return router.push('/agendamento');
+        return router.push('/cliente/agendar-consulta');
           
         
 
