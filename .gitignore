@@ -39,3 +39,7 @@ next-env.d.ts
 workflow.txt
 health-clinic-firebase-adminsdk.json
 .env
+.env*
+
+# backups locais (regras e agenda)
+*.backup-*.json
