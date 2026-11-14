@@ -43,3 +43,4 @@ health-clinic-firebase-adminsdk.json
 
 # backups locais (regras e agenda)
 *.backup-*.json
+!.env.example
