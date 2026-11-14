@@ -1,55 +1,62 @@
 "use client"
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { useMemo } from "react"
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import { format, parse } from "date-fns"
+import { ptBR } from "date-fns/locale"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Layout from "../../components/Admin/Layout"
-import { useDataFromDB, useFetchUserAppointmentsAdmin, useLastSixMonthsAppointments } from "@/firebase/firebaseDBServices"
-import { useMemo } from "react"
+import { useDataFromDB, useFetchUserAppointmentsAdmin } from "@/firebase/firebaseDBServices"
+import { confirmedAppointmentsOn, countAppointmentsByMonth } from "@/utils/functions/adminStats"
+import { toDateKey } from "@/utils/functions/scheduling"
+import { isAdmin } from "@/utils/constants"
 import { AppointmentFormatType } from "@/utils/types"
-import { format, parse } from "date-fns"
-import { ptBR } from 'date-fns/locale';
+
+const MONTHS = 6
 
 export default function Dashboard() {
-  
-  const { data } = useFetchUserAppointmentsAdmin();
-  const { data: lastMonthsAppointments, isLoading: isLoadingLastSixMonths, isError: isErrorLastSixMonths } = useLastSixMonthsAppointments();
-  const { data: registeredPatientsData } = useDataFromDB({route: 'users', queryKey: 'registered-patients-data' });
-  const numberOfPatients = registeredPatientsData && Object.keys(registeredPatientsData).length || 0;
-  
-  const filteredAppointmertsForToday = useMemo(() => {
-    return (data as AppointmentFormatType[])?.filter((appointment) => {
-      if(appointment.status !== 'confirmada') return false;
-      
-      const today = Number(new Date().toLocaleDateString('pt-BR', { day: '2-digit' }))
-      const appointmentDate = new Date(appointment.date);
-      
-      return today === appointmentDate.getUTCDate();
-    });
-  }, [data]);
+  const { data, isLoading, isError } = useFetchUserAppointmentsAdmin()
+  const { data: registeredPatientsData } = useDataFromDB({ route: 'users', queryKey: 'registered-patients-data' })
 
-  const months = lastMonthsAppointments?.map((appointment) => {
-    const date = parse(appointment.month, "yyyy-MM", new Date());  
-    const monthName = format(date, "MMM", { locale: ptBR });
-    return monthName
-  });
-  const monthsData = lastMonthsAppointments?.map((appointment) => ({
-    month: format(parse(appointment.month, "yyyy-MM", new Date()), "MMM yyyy", { locale: ptBR }), // "2025-03" → "Mar"
-    count: appointment.count ?? 0, // Evita undefined
-  })).reverse();
-  
+  const appointments = useMemo(() => (data ?? []) as AppointmentFormatType[], [data])
+  const numberOfPatients = registeredPatientsData
+    ? Object.keys(registeredPatientsData).filter((uid) => !isAdmin(uid)).length
+    : 0
+
+  const todayAppointments = useMemo(() => confirmedAppointmentsOn(appointments, toDateKey(new Date())), [appointments])
+  const pendingCount = appointments.filter((appointment) => appointment.status === "pendente").length
+
+  // Consultas não canceladas por mês, calculadas das próprias consultas.
+  const monthsData = useMemo(
+    () =>
+      countAppointmentsByMonth(appointments, new Date(), MONTHS).map(({ month, count }) => ({
+        month: format(parse(month, "yyyy-MM", new Date()), "MMM yyyy", { locale: ptBR }),
+        count,
+      })),
+    [appointments]
+  )
+
   return (
     <Layout>
-      <div className="w-full max-w-7xl mx-auto">  
+      <div className="w-full max-w-7xl mx-auto">
         <h1 className="text-[1.7rem] md:text-3xl font-bold mb-6 lg:mb-10">Dashboard</h1>
-        <div className="grid gap-6 mb-8 md:grid-cols-2">
+        <div className="grid gap-6 mb-8 md:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Consultas Marcadas Para Hoje</CardTitle>
+              <CardTitle className="text-sm font-medium">Consultas Confirmadas Para Hoje</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{filteredAppointmertsForToday?.length || 0}</div>
+              <div className="text-2xl font-bold">{todayAppointments.length}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Aguardando Confirmação</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{pendingCount}</div>
             </CardContent>
           </Card>
           <Card>
@@ -57,57 +64,58 @@ export default function Dashboard() {
               <CardTitle className="text-sm font-medium">Total de Pacientes Cadastrados</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{numberOfPatients || 0}</div>
+              <div className="text-2xl font-bold">{numberOfPatients}</div>
             </CardContent>
           </Card>
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>Consultas Agendadas para Hoje</CardTitle>
+            <CardTitle>Consultas Confirmadas para Hoje</CardTitle>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Paciente</TableHead>
-                  <TableHead>Médico</TableHead>
-                  <TableHead>Especialidade</TableHead>
-                  <TableHead>Horário</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {
-                  filteredAppointmertsForToday?.map((appointment) => (
+            {todayAppointments.length === 0 ? (
+              <p className="text-gray-600">Nenhuma consulta confirmada para hoje.</p>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Paciente</TableHead>
+                    <TableHead>Médico</TableHead>
+                    <TableHead>Especialidade</TableHead>
+                    <TableHead>Horário</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {todayAppointments.map((appointment) => (
                     <TableRow key={appointment.id}>
-                      <TableCell>{appointment?.patientName}</TableCell>
-                      <TableCell>{appointment?.professionalName}</TableCell>
-                      <TableCell>{appointment?.specialty}</TableCell>
-                      <TableCell>{appointment?.time}</TableCell>
+                      <TableCell>{appointment.patientName}</TableCell>
+                      <TableCell>{appointment.professionalName}</TableCell>
+                      <TableCell>{appointment.specialty}</TableCell>
+                      <TableCell>{appointment.time}</TableCell>
                     </TableRow>
-                    )
-                  )
-                }
-              </TableBody>
-            </Table>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </CardContent>
         </Card>
         <Card className="my-8">
           <CardHeader>
-            <CardTitle>{`Consultas mensais nos últimos ${months?.length} meses`}</CardTitle>
+            <CardTitle>{`Consultas por mês nos últimos ${MONTHS} meses`}</CardTitle>
           </CardHeader>
           <CardContent>
-            { isLoadingLastSixMonths && <span className="mt-5 ml-3">Carregando...</span> }
-            { isErrorLastSixMonths && <span className="mt-5">Erro ao carregar dados.</span> }
-            { !isLoadingLastSixMonths && !isErrorLastSixMonths && (
+            {isLoading && <span className="mt-5 ml-3">Carregando...</span>}
+            {isError && <span className="mt-5">Erro ao carregar dados.</span>}
+            {!isLoading && !isError && (
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={monthsData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
-                  <YAxis />
+                  <YAxis allowDecimals={false} />
                   <Tooltip />
-                  <Line type="monotone" dataKey="count" stroke="#0693DA" />
+                  <Line type="monotone" dataKey="count" name="Consultas" stroke="#0693DA" />
                 </LineChart>
-              </ResponsiveContainer>          
+              </ResponsiveContainer>
             )}
           </CardContent>
         </Card>
@@ -115,4 +123,3 @@ export default function Dashboard() {
     </Layout>
   )
 }
-

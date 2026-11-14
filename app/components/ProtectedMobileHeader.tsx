@@ -41,9 +41,9 @@ export default function ProtectedMobileHeader({ userRole = 'admin' }: { userRole
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                                 <Link 
-                                    href={"/admin/adicionar-profissional"}
+                                    href={"/admin/profissionais-cadastrados"}
                                     className='bg-transparent hover:bg-transparent text-black active:scale-x-[.98]'>
-                                    Cadastrar Profissionais
+                                    Profissionais Cadastrados
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>

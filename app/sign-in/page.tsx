@@ -24,6 +24,10 @@ import { get, ref } from "firebase/database";
 import { signOut } from "firebase/auth";
 import { database } from "@/firebase/firebaseDBConfig";
 import { auth } from "@/firebase/firebaseAuthConfig";
+import { isAdmin } from "@/utils/constants";
+
+// Admin vai para o painel; paciente, para o agendamento.
+const homeFor = (uid: string) => isAdmin(uid) ? '/admin/dashboard' : '/cliente/agendar-consulta';
 
  
 const formSchema = z.object({
@@ -81,7 +85,7 @@ export default function Home() {
         }
         else if(userCredential?.user.uid){
           setLoadUser(false);
-          return router.push('/cliente/agendar-consulta');
+          return router.push(homeFor(userCredential.user.uid));
         }
     }
     
@@ -99,11 +103,8 @@ export default function Home() {
           return;
         }
         setLoadUser(false);
-        return router.push('/cliente/agendar-consulta');
-          
-        
-
-      } 
+        return router.push(homeFor(result.user.uid));
+      }
       else {
         console.error('Error signing in with Google:', error);
         setLoadUser(false);
